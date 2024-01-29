@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Footer from "./components/footer/Footer";
 import DesktopNav from "./components/nav/DesktopNav";
 import MobileNav from "./components/nav/MobileNav";
 import "./globals.css";
@@ -24,7 +25,7 @@ export default function RootLayout({
         />
         <MobileNav menuItems={menuItems} className="sm:hidden" />
         {children}
-        <footer className="bg-green-200 w-full h-52"></footer>
+        <Footer />
       </body>
     </html>
   );
