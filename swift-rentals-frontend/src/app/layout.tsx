@@ -1,3 +1,4 @@
+import StoreProvider from "@/redux/StoreProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Footer from "./components/footer/Footer";
@@ -19,13 +20,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <DesktopNav
-          menuItems={menuItems}
-          className="hidden sm:grid grid-cols-2 "
-        />
-        <MobileNav menuItems={menuItems} className="sm:hidden" />
-        {children}
-        <Footer />
+        <StoreProvider>
+          <DesktopNav
+            menuItems={menuItems}
+            className="hidden sm:grid grid-cols-2 "
+          />
+          <MobileNav menuItems={menuItems} className="sm:hidden" />
+          {children}
+          <Footer />
+        </StoreProvider>
       </body>
     </html>
   );
