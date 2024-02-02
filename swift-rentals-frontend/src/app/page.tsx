@@ -1,40 +1,40 @@
 import Image from "next/image";
+import Hero from "./components/Hero/Hero";
 
 export default function Home() {
   return (
     <main className="h-screen w-ful">
       <section className="flex">
-        <div className="w-1/2 bg-red-200 h-screen"></div>
-        <div className="w-1/2 h-screen relative">
-          <Image
-            className="absolute bottom-32 right-72"
-            src={`/images/payment.png`}
-            width={220}
-            height={220}
-            alt="hero payment image"
-          />
-          <Image
-            className="absolute top-12 left-1/2"
-            src={`/images/payment.png`}
-            width={220}
-            height={220}
-            alt="hero payment image"
-          />
-          <Image
-            className="absolute m-3 top-32 left-1/4"
-            src={`/images/profile.png`}
-            width={140}
-            height={140}
-            alt="hero payment image"
-          />
-          <Image
-            className="absolute m-3 bottom-48 right-20"
-            src={`/images/profile.png`}
-            width={140}
-            height={140}
-            alt="hero payment image"
-          />
+        <div className="w-1/2 h-screen flex place-content-center mt-32">
+          <div className="w-[80%] h-[60%] relative">
+            <h1 className="text-6xl font-semibold">
+              Discover the Freedom of roads with
+              <span className="text-blue-600"> SwiftRentals</span>
+            </h1>
+            <Image
+              className="absolute right-20 top-40"
+              src={`/images/stroke.png`}
+              alt="stroke under swift rental"
+              width={400}
+              height={100}
+            />
+            <p className="mt-14 text-gray-400">
+              every journey should be an unforgettable adventure. Whether
+              you&apos;re embarking on a business trip, a family vacation, or a
+              weekend getaway, we&apos;ve got the perfect wheels to elevate your
+              experience.
+            </p>
+            <div className="mx-4 my-6">
+              <button className="bg-blue-500 rounded-xl text-white p-3 m-2 font-bold hover:opacity-80 transition-opacity ">
+                Explore our Cars
+              </button>
+              <button className="bg-blue-200 rounded-xl text-blue-500 font-bold py-3 px-5 m-2 hover:opacity-80 transition-opacity">
+                Find out More!
+              </button>
+            </div>
+          </div>
         </div>
+        <Hero />
       </section>
     </main>
   );
