@@ -1,15 +1,93 @@
 "use client";
 
+import axios from "axios";
+import { log } from "console";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
+import { ZodError, z } from "zod";
 import CustomFormField from "../ui/CustomFormField/CustomFormField";
 
-export default function page() {
- 
+const loginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().refine((password) => password.trim().length > 0, {
+    message: "Password cannot be empty",
+  }),
+});
+
+export default function Page() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [errorData, setErrorData] = useState({
+    email: "",
+    password: "",
+  });
+  const router = useRouter();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorData((prevErrorData) => ({
+      ...prevErrorData,
+      email: "",
+      password: "",
+    }));
+    try {
+      const validatedData = loginSchema.safeParse(formData);
+      console.log("Valid data:", validatedData);
+      if (validatedData.success) {
+        const response = await axios.post(
+          "http://localhost:3001/api/auth/login",
+          {
+            email: formData.email,
+            password: formData.password,
+          }
+        );
+        if (response.status == 200) {
+          toast.success("Login Successfull!");
+          router.push("/");
+        }
+      } else {
+        for (const error of validatedData.error.errors) {
+          console.log(error);
+          setErrorData((prev) => ({
+            ...prev,
+            [error.path.toString()]: error.message,
+          }));
+        }
+      }
+    } catch (error: any) {
+      console.log(error.response.data.error);
+
+      switch (error.response.data.error) {
+        case "Invalid password":
+          setErrorData((prev) => ({
+            ...prev,
+            password: "Incorrect password!",
+          }));
+          break;
+        case "Invalid email":
+          setErrorData((prev) => ({
+            ...prev,
+            email: "Email not recognized. Please signup first!",
+          }));
+          break;
+      }
+      toast.error("Login Failed!");
+    }
+  };
+
   return (
     <div>
       <div className="w-[75%] min-h-[500px] shadow-2xl rounded-xl m-auto my-14 p-5 flex">
@@ -20,20 +98,26 @@ export default function page() {
           <p className="text-gray-400 mb-2 text-sm">
             Enter details to log into swiftrentals
           </p>
-          <form action="POST">
+          <form onSubmit={handleSubmit}>
             <CustomFormField
+              errorText={errorData.email}
               icon={FaUserCircle}
               placeholder="Enter your email"
-              name="user_email"
+              name="email"
               type="text"
               id="userEmail"
+              value={formData.email}
+              onChange={handleInputChange}
             />
             <CustomFormField
               icon={FaEyeSlash}
+              errorText={errorData.password}
               placeholder="Enter your password"
-              name="user_password"
+              name="password"
               type="password"
               id="userPassword"
+              value={formData.password}
+              onChange={handleInputChange}
             />
             <button
               type="submit"
@@ -42,7 +126,7 @@ export default function page() {
               Log in
             </button>
           </form>
-          <ToastContainer />
+
           <div className="w-3/4 p-1">
             <p className="font-semibold sm:text-md text-center">
               forgot your password?
