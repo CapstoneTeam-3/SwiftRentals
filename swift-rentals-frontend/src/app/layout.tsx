@@ -15,15 +15,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const menuItems: string[] = ["Browse", "Profile", "Profile", "Settings"];
+  const menuItems: string[] = ["Browse", "Profile", "Profile", "Login"];
+  const menuLinks: string[] = ["/", "/", "/", "/login"];
   return (
     <html lang="en">
       <body className={inter.className}>
         <DesktopNav
           menuItems={menuItems}
+          menuLinks={menuLinks}
           className="hidden sm:grid grid-cols-2 "
         />
-        <MobileNav menuItems={menuItems} className="sm:hidden" />
+        <MobileNav
+          menuItems={menuItems}
+          menuLinks={menuLinks}
+          className="sm:hidden"
+        />
         {children}
         <Footer />
       </body>
