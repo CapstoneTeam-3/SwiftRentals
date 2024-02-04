@@ -3,6 +3,7 @@
 import axios from "axios";
 import { log } from "console";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
@@ -137,7 +138,7 @@ export default function Page() {
             <p className="text-gray-400 text-center">
               Don&apos;t have an account?
               <span className="text-black font-semibold underline">
-                <a href="/">Sign up</a>
+                <Link href="/signup">Sign up</Link>
               </span>
             </p>
           </div>
