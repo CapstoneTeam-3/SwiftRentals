@@ -3,9 +3,9 @@ import Hero from "./components/Hero/Hero";
 
 export default function Home() {
   return (
-    <main className="h-screen w-ful">
+    <main className="min-min-h-screen w-ful">
       <section className="flex">
-        <div className="w-1/2 h-screen flex place-content-center mt-32">
+        <div className="w-1/2 min-h-screen flex place-content-center mt-32">
           <div className="w-[80%] h-[60%] relative">
             <h1 className="text-6xl font-semibold">
               Discover the Freedom of roads with

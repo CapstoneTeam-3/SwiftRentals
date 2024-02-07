@@ -51,7 +51,7 @@ export default function AddCar() {
     }
 
     return (
-        <main className="min-h-screen w-full bg-[#f1f1fc]">
+        <main className="min-min-h-screen w-full bg-[#f1f1fc]">
             <div className="container mx-auto md:max-w-[1050px] py-5">
                 <h1 className="text-3xl mb-5">Add Car</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className="form">

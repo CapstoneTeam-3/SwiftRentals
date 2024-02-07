@@ -51,7 +51,7 @@ export default function MobileNav({
       </nav>
       <section
         className={`w-screen border-t-2 transition-all duration-500 ease-in-out ${
-          isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+          isMenuOpen ? "max-min-h-screen opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <ul className="p-4">

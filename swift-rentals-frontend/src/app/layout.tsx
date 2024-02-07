@@ -18,8 +18,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const menuItems: string[] = ["Browse", "Profile", "Profile", "Login"];
-  const menuLinks: string[] = ["/", "/", "/", "/login"];
+  const menuItems: string[] = ["Browse", "Profile", "Profile", "Login", "Admin", "Cars", "Add Car"];
+  const menuLinks: string[] = ["/", "/", "/", "/login", "/admin", "/admin/cars", "/admin/cars/add"];
   return (
     <html lang="en">
       <body className={inter.className}>
