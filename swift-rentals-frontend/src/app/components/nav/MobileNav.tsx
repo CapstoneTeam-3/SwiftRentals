@@ -6,9 +6,11 @@ import { IoClose, IoMenu } from "react-icons/io5";
 
 export default function MobileNav({
   menuItems,
+  menuLinks,
   className,
 }: {
   menuItems: string[];
+  menuLinks: string[];
   className: string;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,7 +60,7 @@ export default function MobileNav({
               key={i}
               className="font-semibold text-center m-1 transition-transform hover:scale-110 cursor-pointer hover:text-blue-600"
             >
-              {item}
+              <a href={menuLinks[i]}>{item}</a>
             </li>
           ))}
         </ul>
