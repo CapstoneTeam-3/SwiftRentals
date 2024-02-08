@@ -5,6 +5,8 @@ import { Bounce, ToastContainer } from "react-toastify";
 import Footer from "./components/footer/Footer";
 import DesktopNav from "./components/nav/DesktopNav";
 import MobileNav from "./components/nav/MobileNav";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

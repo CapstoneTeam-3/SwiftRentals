@@ -4,6 +4,7 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import { SlHeart } from "react-icons/sl";
 import Dropdown from "../components/Dropdown";
 import { IoFilterSharp } from "react-icons/io5";
+import Link from "next/link";
 
 export default function AdminHome() {
     return (
@@ -16,7 +17,7 @@ export default function AdminHome() {
                 </div>
                 <div className="grid grid-cols-1 gap-5">
                     {[1, 2, 3, 4, 5].map((item) =>
-                        <div className="flex border bg-white rounded-2xl overflow-hidden">
+                        <Link href={`/cars/detail`} className="flex border bg-white rounded-2xl overflow-hidden">
                             <div className="w-[300px]">
                                 <img src="images/car.png" className="h-[180px] w-full object-cover" />
                             </div>
@@ -33,7 +34,7 @@ export default function AdminHome() {
                                 </div>
                                 <span className="text-lg font-bold mb-1 text-right me-2">CAD $198.00 total</span>
                             </div>
-                        </div>
+                        </Link>
                     )}
                 </div>
             </div>
