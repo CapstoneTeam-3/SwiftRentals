@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const menuItems: string[] = ["Browse", "Profile", "Profile", "Login"];
-  const menuLinks: string[] = ["/", "/", "/", "/login"];
+  const menuLinks: string[] = ["/", "/", "/", "/auth/login"];
   return (
     <html lang="en">
       <body className={inter.className}>

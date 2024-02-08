@@ -10,7 +10,7 @@ import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
-import CustomFormField from "../ui/CustomFormField/CustomFormField";
+import CustomFormField from "../../ui/CustomFormField/CustomFormField";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -82,14 +82,14 @@ export default function Page() {
   return (
     <div>
       <div className="w-[75%] min-h-[500px] shadow-2xl rounded-xl m-auto my-14 p-5 flex">
-        <div className="w-full md:w-1/2 p-10 mt-4 flex flex-col place-content-center justify-center">
+        <div className="w-full lg:w-1/2 p-10 mt-4 flex flex-col place-content-center justify-center">
           <h3 className="font-bold text-3xl ">
             Log in <span className="text-blue-600">Swift</span>
           </h3>
           <p className="text-gray-400 mb-2 text-sm">
             Enter details to log into swiftrentals
           </p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="flex flex-col ">
             <CustomFormField
               errorText={errorData.email}
               icon={FaUserCircle}
@@ -115,28 +115,28 @@ export default function Page() {
             </div>
             <button
               type="submit"
-              className="bg-black text-white font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
+              className="bg-black place-self-center text-white font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
             >
               Log in
             </button>
           </form>
 
-          <div className="w-3/4 p-1">
-            <p className="font-semibold sm:text-md text-center">
+          <div className=" p-1">
+            <p className="font-semibold place-self-center sm:text-md text-center">
               forgot your password?
             </p>
           </div>
-          <hr className="w-3/4 border-1 m-2" />
-          <div className="w-3/4">
+          <hr className=" border-1 m-2" />
+          <div className=" text-center">
             <p className="text-gray-400 text-center">
               Don&apos;t have an account?
               <span className="text-black font-semibold underline">
-                <Link href="/signup">Sign up</Link>
+                <Link href="/auth/signup">Sign up</Link>
               </span>
             </p>
           </div>
         </div>
-        <div className="w-0 md:w-1/2 relative">
+        <div className="w-0 lg:w-1/2 relative">
           <Image
             src="/images/login1.jpg"
             alt="small login image"
@@ -147,7 +147,7 @@ export default function Page() {
           <Image
             src="/images/login2.jpg"
             alt="small login image"
-            className="hidden md:block h-full lg:w-52 lg:h-auto rounded-xl  absolute right-4 top-0 shadow-2xl"
+            className="hidden lg:block h-full lg:w-52 lg:h-auto rounded-xl  absolute right-4 top-0 shadow-2xl"
             width={400}
             height={100}
           />

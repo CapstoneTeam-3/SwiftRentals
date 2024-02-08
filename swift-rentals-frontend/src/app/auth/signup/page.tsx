@@ -14,7 +14,8 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
-import CustomFormField from "../ui/CustomFormField/CustomFormField";
+import CustomFormField from "../../ui/CustomFormField/CustomFormField";
+import Link from "next/link";
 
 const signupSchema = z
   .object({
@@ -137,7 +138,7 @@ export default function Page() {
               Enter details to signup for swiftrentals
             </p>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="flex flex-col">
               <div className="grid grid-cols-1  md:grid-cols-2">
                 <CustomFormField
                   errorText={errorData.email}
@@ -197,17 +198,17 @@ export default function Page() {
               </div>
               <button
                 type="submit"
-                className="bg-black text-white font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
+                className="bg-black text-white place-self-center font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
               >
                 Sign up
               </button>
             </form>
-            <hr className="w-3/4 border-1 m-2" />
-            <div className="w-3/4">
+            <hr className="border-1 m-2" />
+            <div className="">
               <p className="text-gray-400 text-center">
                 already have an account?
                 <span className="text-black font-semibold underline">
-                  <a href="/">Sign in</a>
+                  <Link href="/auth/login">Sign in</Link>
                 </span>
               </p>
             </div>
