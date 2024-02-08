@@ -28,6 +28,8 @@ export default function Page() {
     email: "",
     password: "",
   });
+  const [serverError, setServerError] = useState("");
+
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +58,8 @@ export default function Page() {
           }
         );
         if (response.status == 200) {
+          console.log(response);
+
           toast.success("Login Successfull!");
           router.push("/");
         }
@@ -70,21 +74,7 @@ export default function Page() {
       }
     } catch (error: any) {
       console.log(error.response.data.error);
-
-      switch (error.response.data.error) {
-        case "Invalid password":
-          setErrorData((prev) => ({
-            ...prev,
-            password: "Incorrect password!",
-          }));
-          break;
-        case "Invalid email":
-          setErrorData((prev) => ({
-            ...prev,
-            email: "Email not recognized. Please signup first!",
-          }));
-          break;
-      }
+      setServerError(error.response.data.error);
       toast.error("Login Failed!");
     }
   };
@@ -120,6 +110,9 @@ export default function Page() {
               value={formData.password}
               onChange={handleInputChange}
             />
+            <div className="w-3/4">
+              <p className="text-center text-red-500">{serverError}</p>
+            </div>
             <button
               type="submit"
               className="bg-black text-white font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
@@ -147,9 +140,9 @@ export default function Page() {
           <Image
             src="/images/login1.jpg"
             alt="small login image"
-            className="w-full rounded-xl absolute right-20 shadow-xl hidden lg:block  bottom-8"
-            width={400}
-            height={100}
+            className="w-96 rounded-xl absolute right-20 shadow-xl hidden lg:block  bottom-16"
+            width={300}
+            height={60}
           />
           <Image
             src="/images/login2.jpg"

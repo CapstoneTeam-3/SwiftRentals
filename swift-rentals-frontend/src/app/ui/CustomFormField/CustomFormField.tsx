@@ -17,7 +17,7 @@ const CustomFormField: React.FC<InputWithIconProps> = ({
 }) => {
   return (
     <div>
-      <div className="relative w-full sm:w-3/4">
+      <div className="relative w-full px-2 py-1">
         <input
           {...props}
           className="border-2 my-0 rounded-full w-full py-2 pl-10"
@@ -27,7 +27,7 @@ const CustomFormField: React.FC<InputWithIconProps> = ({
         {Icon && (
           <Icon
             size={24}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2"
           />
         )}
       </div>
