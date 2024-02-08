@@ -3,6 +3,7 @@
 import axios from "axios";
 import { error, log } from "console";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
@@ -15,7 +16,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
 import CustomFormField from "../../ui/CustomFormField/CustomFormField";
-import Link from "next/link";
 
 const signupSchema = z
   .object({
@@ -42,6 +42,7 @@ const signupSchema = z
   });
 
 export default function Page() {
+  //state with all required data
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -50,6 +51,7 @@ export default function Page() {
     confirmPassword: "",
     role: "",
   });
+  //state for all fields errors
   const [errorData, setErrorData] = useState({
     email: "",
     password: "",
@@ -58,11 +60,14 @@ export default function Page() {
     confirmPassword: "",
     role: "",
   });
+  //for any server errors
   const [serverError, setServerError] = useState("");
+  //state to switch components based on email sent or not
   const [emailSent, setEmailSent] = useState(false);
 
   const router = useRouter();
 
+  //updates fields states accordingly
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -72,6 +77,7 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    //reset all errors
     setServerError("");
     setErrorData((prevErrorData) => ({
       ...prevErrorData,
@@ -84,9 +90,11 @@ export default function Page() {
     }));
 
     try {
+      //fire up all validations
       const validatedData = signupSchema.safeParse(formData);
       console.log("Valid data:", validatedData);
       if (validatedData.success) {
+        //register user if validated
         const response = await axios.post(
           "http://localhost:3001/api/auth/register",
           {
@@ -101,10 +109,12 @@ export default function Page() {
         if (response.status == 200) {
           toast.success("Successfully Registered!");
           console.log(response);
+          //if success show switch to email component
           setEmailSent(true);
         }
       } else {
         for (const error of validatedData.error.errors) {
+          //show any field errors
           console.log(error);
           setErrorData((prev) => ({
             ...prev,
@@ -113,6 +123,7 @@ export default function Page() {
         }
       }
     } catch (error: any) {
+      //show any server errors
       setServerError(error.response.data.error);
       toast.error("Login Failed!");
     }
@@ -130,7 +141,7 @@ export default function Page() {
         </div>
       ) : (
         <div className="w-[75%] min-h-[500px] shadow-2xl rounded-xl m-auto my-14 p-5 flex">
-          <div className="w-full md:w-full p-10 mt-4 flex flex-col place-content-center justify-center">
+          <div className="w-full md:w-full  p-0 md:p-10 mt-4 flex flex-col place-content-center justify-center">
             <h3 className="font-bold text-3xl ">
               Sign up <span className="text-blue-600">Swift</span>
             </h3>

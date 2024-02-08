@@ -31,7 +31,7 @@ const CustomFormField: React.FC<InputWithIconProps> = ({
           />
         )}
       </div>
-      <div className="text-red-500 mx-3 mb-2">{errorText}</div>
+      <div className="text-red-500 mx-3 mb-2 text-center">{errorText}</div>
     </div>
   );
 };

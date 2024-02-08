@@ -7,10 +7,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
 import CustomFormField from "../../ui/CustomFormField/CustomFormField";
+import { setUser } from "./userSlice";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -20,18 +22,23 @@ const loginSchema = z.object({
 });
 
 export default function Page() {
+  //state will all field data
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  //error text state
   const [errorData, setErrorData] = useState({
     email: "",
     password: "",
   });
+  //to show any error sent from server
   const [serverError, setServerError] = useState("");
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
+  //updates field state based on item clicked
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -41,15 +48,18 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    //reset previous errors
     setErrorData((prevErrorData) => ({
       ...prevErrorData,
       email: "",
       password: "",
     }));
     try {
+      //fire up login schema to run all validation
       const validatedData = loginSchema.safeParse(formData);
       console.log("Valid data:", validatedData);
       if (validatedData.success) {
+        //if success request backend for login
         const response = await axios.post(
           "http://localhost:3001/api/auth/login",
           {
@@ -59,13 +69,15 @@ export default function Page() {
         );
         if (response.status == 200) {
           console.log(response);
-
+          //if success store token in redux store
+          dispatch(setUser(response.data.token));
           toast.success("Login Successfull!");
           router.push("/");
         }
       } else {
         for (const error of validatedData.error.errors) {
           console.log(error);
+          //sets corresponding errors on error
           setErrorData((prev) => ({
             ...prev,
             [error.path.toString()]: error.message,
@@ -74,6 +86,7 @@ export default function Page() {
       }
     } catch (error: any) {
       console.log(error.response.data.error);
+      //sets server errors
       setServerError(error.response.data.error);
       toast.error("Login Failed!");
     }
@@ -82,7 +95,7 @@ export default function Page() {
   return (
     <div>
       <div className="w-[75%] min-h-[500px] shadow-2xl rounded-xl m-auto my-14 p-5 flex">
-        <div className="w-full lg:w-1/2 p-10 mt-4 flex flex-col place-content-center justify-center">
+        <div className="w-full lg:w-1/2 p-0 md:p-10 mt-4 flex flex-col place-content-center justify-center">
           <h3 className="font-bold text-3xl ">
             Log in <span className="text-blue-600">Swift</span>
           </h3>
@@ -123,7 +136,7 @@ export default function Page() {
 
           <div className=" p-1">
             <p className="font-semibold place-self-center sm:text-md text-center">
-              forgot your password?
+              <Link href="/auth/password/reset">forgot your password?</Link>
             </p>
           </div>
           <hr className=" border-1 m-2" />
