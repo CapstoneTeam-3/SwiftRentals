@@ -11,14 +11,14 @@ export default function AdminHome() {
         <main className="min-h-screen w-full bg-[#f1f1fc]">
             <div className="container mx-auto md:max-w-[1050px] py-5">
                 {Filter()}
-                <div className="mt-10 mb-8 flex justify-between items-baseline">
+                <div className="mt-10 mb-8 flex flex-wrap justify-between items-baseline">
                     <h1 className="text-3xl mb-5 font-semibold">Choose your vehicle</h1>
                     <h2 className="text-xl font-light">200+ cars available</h2>
                 </div>
                 <div className="grid grid-cols-1 gap-5">
                     {[1, 2, 3, 4, 5].map((item) =>
-                        <Link href={`/cars/detail`} className="flex border bg-white rounded-2xl overflow-hidden">
-                            <div className="w-[300px]">
+                        <Link href={`/cars/detail`} className="flex flex-col flex-wrap border bg-white rounded-2xl overflow-hidden md:flex-row">
+                            <div className="w-full md:w-[300px]">
                                 <img src="images/car.png" className="h-[180px] w-full object-cover" />
                             </div>
                             <div className="flex flex-col flex-1 py-2 px-3">
@@ -54,7 +54,7 @@ export default function AdminHome() {
 
         return (
             <div className="flex items-center mt-2">
-                <div className="flex gap-5">
+                <div className="flex flex-wrap gap-5">
                     <Dropdown label="Sort by" options={sortByOptions} onChange={handleDropdownChange} />
                     <Dropdown label="Make" options={sortByOptions} onChange={handleDropdownChange} />
                     <Dropdown label="Transmission" options={sortByOptions} onChange={handleDropdownChange} />

@@ -17,11 +17,11 @@ export default function AdminHome() {
         <main className="min-h-screen w-full ">
             <div className="h-[500px] w-full">
                 {/* <img src="/images/car.png" className="h-full w-full object-cover" /> */}
-                <SimpleSlider images={["/images/car.png", "/images/car.png", "/images/car.png"]}/>
+                <SimpleSlider images={["/images/car.png", "/images/car.png", "/images/car.png"]} />
             </div>
             <div className="container mx-auto md:max-w-[1050px] py-5">
-                <div className="flex flex-wrap gap-5">
-                    <div className="mt-10 mb-8 w-2/3 ">
+                <div className="flex flex-row flex-wrap pt-10">
+                    <div className="mb-8 w-full lg:w-2/3 lg:pe-5">
                         <div className="bg-white rounded-xl shadow-md p-6">
                             <h1 className="text-3xl mb-1 font-semibold">Mustang</h1>
                             <h2 className="text-md font-light">Ford</h2>
@@ -47,23 +47,29 @@ export default function AdminHome() {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-10 flex-1 w-1/3">
+                    <div className="w-full lg:w-1/3">
                         <div className="bg-white rounded-xl shadow-md p-6">
                             <span className="text-lg font-bold mb-1 text-right me-2">CAD $198.00 total</span>
-                            <hr className="my-5" />
-                            <h3 className="mb-2">FROM</h3>
-                            <div className="flex item-center">
-                                <input type="date" className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm me-2" />
-                                <Dropdown label="Time" options={timeSlots} onChange={() => { }} />
+                            <hr className="mt-5 mb-1" />
+                            <div className="flex flex-wrap">
+                                <div className="me-5">
+                                    <h3 className="mb-2 mt-4">FROM</h3>
+                                    <div className="flex item-center">
+                                        <input type="date" className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm me-2" />
+                                        <Dropdown label="Time" options={timeSlots} onChange={() => { }} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="mb-2 mt-4">TO</h3>
+                                    <div className="flex item-center">
+                                        <input type="date" className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm me-2" />
+                                        <Dropdown label="Time" options={timeSlots} onChange={() => { }} />
+                                    </div>
+                                </div>
+                                <button
+                                    className="bg-black text-white font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
+                                >Book</button>
                             </div>
-                            <h3 className="mb-2 mt-4">TO</h3>
-                            <div className="flex item-center">
-                                <input type="date" className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm me-2" />
-                                <Dropdown label="Time" options={timeSlots} onChange={() => { }} />
-                            </div>
-                            <button
-                                className="bg-black text-white font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
-                            >Book</button>
                         </div>
                     </div>
                 </div>

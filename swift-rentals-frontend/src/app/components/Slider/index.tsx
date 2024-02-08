@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import Slider from "react-slick";
 
-function CustomSlider({ images }: { images: string[] }) { 
+function CustomSlider({ images }: { images: string[] }) {
     const settings = {
+        /*
+            Image pagination
+        */
+
         // customPaging: function (i: number) { 
         //     return (
         //         <a className="w-[350px]">
@@ -20,8 +24,8 @@ function CustomSlider({ images }: { images: string[] }) {
     return (
         <div className="slider-container">
             <Slider {...settings}>
-                {images?.map((img, index) => ( 
-                    <img key={index} src={img} alt="car" className="h-[500px] w-full object-cover" /> 
+                {images?.map((img, index) => (
+                    <img key={index} src={img} alt="car" className="h-[500px] w-full object-cover" />
                 ))}
             </Slider>
         </div>
