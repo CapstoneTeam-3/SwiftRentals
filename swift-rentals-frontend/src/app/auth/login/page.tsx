@@ -136,7 +136,7 @@ export default function Page() {
 
           <div className=" p-1">
             <p className="font-semibold place-self-center sm:text-md text-center">
-              <Link href="/auth/password/reset">forgot your password?</Link>
+              <Link href="/auth/password/forget">forgot your password?</Link>
             </p>
           </div>
           <hr className=" border-1 m-2" />

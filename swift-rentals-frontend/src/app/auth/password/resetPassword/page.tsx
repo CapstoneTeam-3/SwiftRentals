@@ -12,7 +12,7 @@ import { MdOutlineLockReset as Lock } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
-import CustomFormField from "../../ui/CustomFormField/CustomFormField";
+import CustomFormField from "../../../ui/CustomFormField/CustomFormField";
 
 const forgetSchema = z
   .object({
@@ -29,8 +29,14 @@ const forgetSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+type Props = {
+  params: {};
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+export default function Page(props: any) {
+  const searchParams = props.searchParams;
+  const page = searchParams.page;
 
-export default function Page() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     password: "",
@@ -46,7 +52,7 @@ export default function Page() {
       [e.target.name]: e.target.value,
     });
   };
-  const passwordChangeHandler = () => {
+  const passwordChangeHandler = async () => {
     setErrorData({ password: "", confirmPassword: "" });
     const validate = forgetSchema.safeParse(formData);
     console.log(validate);
@@ -59,10 +65,20 @@ export default function Page() {
         }));
       }
     } else {
-      toast.success("Password changed successfully!");
-      router.push("/");
-
-      // TODO:call api
+      const response = await axios(
+        `http://localhost:3001/api/auth/reset-password?token=${searchParams.token}`,
+        {
+          method: "post",
+          data: {
+            newPassword: formData.password,
+            confirmPassword: formData.confirmPassword,
+          },
+        }
+      );
+      if (response.status == 200) {
+        toast.success("Password changed successfully!");
+        router.push("/auth/login");
+      } else toast.error("Something went Wrong. Please try again!");
     }
   };
   return (
@@ -72,7 +88,7 @@ export default function Page() {
         <span className="text-2xl block">Reset Password</span>
         Please enter your new password to reset.
       </div>
-      <div className="w-1/3">
+      <div className="w-full md:w-1/3">
         <CustomFormField
           errorText={errorData.password}
           icon={FaUserCircle}
