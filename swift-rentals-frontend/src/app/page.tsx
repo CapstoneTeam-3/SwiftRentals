@@ -3,21 +3,23 @@ import Hero from "./components/Hero/Hero";
 
 export default function Home() {
   return (
-    <main className="h-screen w-ful">
-      <section className="flex">
-        <div className="w-1/2 h-screen flex place-content-center mt-32">
-          <div className="w-[80%] h-[60%] relative">
-            <h1 className="text-6xl font-semibold">
+    <main className="w-full">
+      <section className="flex flex-col lg:flex-row">
+        <div className="lg:w-1/2 flex place-content-center mt-0 mx-2 sm:mt-32">
+          <div className="w-[80%] lg:w-[100%] m-10 h-[60%] relative">
+            <h1 className="text-4xl sm:text-6xl font-semibold">
               Discover the Freedom of roads with
-              <span className="text-blue-600"> SwiftRentals</span>
+              <span className="text-blue-600 relative inline-block">
+                SwiftRentals
+                <Image
+                  className="absolute right-0 bottom-[-40px] lg:right-auto lg:left-0"
+                  src={`/images/stroke.png`}
+                  alt="stroke under swift rental"
+                  width={400}
+                  height={100}
+                />
+              </span>
             </h1>
-            <Image
-              className="absolute right-20 top-40"
-              src={`/images/stroke.png`}
-              alt="stroke under swift rental"
-              width={400}
-              height={100}
-            />
             <p className="mt-14 text-gray-400">
               every journey should be an unforgettable adventure. Whether
               you&apos;re embarking on a business trip, a family vacation, or a
@@ -34,7 +36,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <Hero />
+        <Hero className="hidden lg:block" />
       </section>
     </main>
   );

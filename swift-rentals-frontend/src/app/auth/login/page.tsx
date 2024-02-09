@@ -7,10 +7,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
-import CustomFormField from "../ui/CustomFormField/CustomFormField";
+import CustomFormField from "../../ui/CustomFormField/CustomFormField";
+import { setUser } from "./userSlice";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -20,16 +22,23 @@ const loginSchema = z.object({
 });
 
 export default function Page() {
+  //state will all field data
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  //error text state
   const [errorData, setErrorData] = useState({
     email: "",
     password: "",
   });
-  const router = useRouter();
+  //to show any error sent from server
+  const [serverError, setServerError] = useState("");
 
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  //updates field state based on item clicked
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -39,15 +48,18 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    //reset previous errors
     setErrorData((prevErrorData) => ({
       ...prevErrorData,
       email: "",
       password: "",
     }));
     try {
+      //fire up login schema to run all validation
       const validatedData = loginSchema.safeParse(formData);
       console.log("Valid data:", validatedData);
       if (validatedData.success) {
+        //if success request backend for login
         const response = await axios.post(
           "http://localhost:3001/api/auth/login",
           {
@@ -56,12 +68,16 @@ export default function Page() {
           }
         );
         if (response.status == 200) {
+          console.log(response);
+          //if success store token in redux store
+          dispatch(setUser(response.data.token));
           toast.success("Login Successfull!");
           router.push("/");
         }
       } else {
         for (const error of validatedData.error.errors) {
           console.log(error);
+          //sets corresponding errors on error
           setErrorData((prev) => ({
             ...prev,
             [error.path.toString()]: error.message,
@@ -70,21 +86,8 @@ export default function Page() {
       }
     } catch (error: any) {
       console.log(error.response.data.error);
-
-      switch (error.response.data.error) {
-        case "Invalid password":
-          setErrorData((prev) => ({
-            ...prev,
-            password: "Incorrect password!",
-          }));
-          break;
-        case "Invalid email":
-          setErrorData((prev) => ({
-            ...prev,
-            email: "Email not recognized. Please signup first!",
-          }));
-          break;
-      }
+      //sets server errors
+      setServerError(error.response.data.error);
       toast.error("Login Failed!");
     }
   };
@@ -92,14 +95,14 @@ export default function Page() {
   return (
     <div>
       <div className="w-[75%] min-h-[500px] shadow-2xl rounded-xl m-auto my-14 p-5 flex">
-        <div className="w-full md:w-1/2 p-10 mt-4 flex flex-col place-content-center justify-center">
+        <div className="w-full lg:w-1/2 p-0 md:p-10 mt-4 flex flex-col place-content-center justify-center">
           <h3 className="font-bold text-3xl ">
             Log in <span className="text-blue-600">Swift</span>
           </h3>
           <p className="text-gray-400 mb-2 text-sm">
             Enter details to log into swiftrentals
           </p>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="flex flex-col ">
             <CustomFormField
               errorText={errorData.email}
               icon={FaUserCircle}
@@ -120,41 +123,44 @@ export default function Page() {
               value={formData.password}
               onChange={handleInputChange}
             />
+            <div className="w-3/4">
+              <p className="text-center text-red-500">{serverError}</p>
+            </div>
             <button
               type="submit"
-              className="bg-black text-white font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
+              className="bg-black place-self-center text-white font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
             >
               Log in
             </button>
           </form>
 
-          <div className="w-3/4 p-1">
-            <p className="font-semibold sm:text-md text-center">
-              forgot your password?
+          <div className=" p-1">
+            <p className="font-semibold place-self-center sm:text-md text-center">
+              <Link href="/auth/password/forget">forgot your password?</Link>
             </p>
           </div>
-          <hr className="w-3/4 border-1 m-2" />
-          <div className="w-3/4">
+          <hr className=" border-1 m-2" />
+          <div className=" text-center">
             <p className="text-gray-400 text-center">
               Don&apos;t have an account?
               <span className="text-black font-semibold underline">
-                <Link href="/signup">Sign up</Link>
+                <Link href="/auth/signup">Sign up</Link>
               </span>
             </p>
           </div>
         </div>
-        <div className="w-0 md:w-1/2 relative">
+        <div className="w-0 lg:w-1/2 relative">
           <Image
             src="/images/login1.jpg"
             alt="small login image"
-            className="w-full rounded-xl absolute right-20 shadow-xl hidden lg:block  bottom-8"
-            width={400}
-            height={100}
+            className="w-96 rounded-xl absolute right-20 shadow-xl hidden lg:block  bottom-16"
+            width={300}
+            height={60}
           />
           <Image
             src="/images/login2.jpg"
             alt="small login image"
-            className="hidden md:block h-full lg:w-52 lg:h-auto rounded-xl  absolute right-4 top-0 shadow-2xl"
+            className="hidden lg:block h-full lg:w-52 lg:h-auto rounded-xl  absolute right-4 top-0 shadow-2xl"
             width={400}
             height={100}
           />

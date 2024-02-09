@@ -6,6 +6,9 @@ import Footer from "./components/footer/Footer";
 import DesktopNav from "./components/nav/DesktopNav";
 import MobileNav from "./components/nav/MobileNav";
 import "./globals.css";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import Nav from "./components/nav/Nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +21,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const menuItems: string[] = ["Browse", "Profile", "Profile", "Login"];
-  const menuLinks: string[] = ["/", "/", "/", "/login"];
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -36,16 +37,7 @@ export default function RootLayout({
             pauseOnHover
             transition={Bounce}
           />
-          <DesktopNav
-            menuItems={menuItems}
-            menuLinks={menuLinks}
-            className="hidden sm:grid grid-cols-2 "
-          />
-          <MobileNav
-            menuItems={menuItems}
-            menuLinks={menuLinks}
-            className="sm:hidden"
-          />
+          <Nav />
           {children}
           <Footer />
         </StoreProvider>
