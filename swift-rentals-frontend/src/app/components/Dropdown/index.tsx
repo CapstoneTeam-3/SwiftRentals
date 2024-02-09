@@ -34,7 +34,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, options, onChange }) => {
             </button>
 
             {isOpen && (
-                <div className="absolute mt-3 bg-white shadow-lg rounded-md">
+                <div className="absolute mt-3 bg-white shadow-lg rounded-md z-10">
                     <ul
                         className="py-1 rounded-md shadow-xs max-h-60"
                         tabIndex={-1}

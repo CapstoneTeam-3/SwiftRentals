@@ -1,0 +1,18 @@
+export type Car = {
+    _id: string;
+    make: string;
+    model: string;
+    manufacturing_year: string;
+    is_available: string;
+    price: string;
+    images: string[];
+    description: string;
+    location: string;
+    features: [];
+};
+
+export type Feature = {
+    _id: string;
+    icon: string;
+    name: string;
+}

@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { carAPI } from '@/api/cars'
+import { Car } from '@/types';
 
 export const fetchCars = createAsyncThunk(
-    'users/fetchByIdStatus',
+    'cars/fetch',
     async () => {
         const response = await carAPI.getCarList();
         return response.data
@@ -10,17 +11,19 @@ export const fetchCars = createAsyncThunk(
 )
 
 interface CarState {
+    selectedCar: Car | null,
     carList: [],
     success: Boolean,
     loading: Boolean,
     error: string | null;
-    page: Number
-    pageSize: Number
-    totalCars: Number
-    totalPages: Number
+    page: number
+    pageSize: number
+    totalCars: number
+    totalPages: number
 }
 
 const initialState = {
+    selectedCar: null,
     carList: [],
     success: false,
     loading: false,
@@ -35,7 +38,9 @@ const carSlice = createSlice({
     name: 'car',
     initialState,
     reducers: {
-
+        setSelectedCar: (state, action) => {
+            state.selectedCar = action.payload?.car;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchCars.pending, (state, action) => {
@@ -66,5 +71,5 @@ const carSlice = createSlice({
     },
 })
 
-export const { } = carSlice.actions
+export const { setSelectedCar } = carSlice.actions
 export default carSlice.reducer

@@ -4,8 +4,11 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import { SlHeart } from "react-icons/sl";
 import Dropdown from "@/app/components/Dropdown";
 import SimpleSlider from "@/app/components/Slider";
+import { useAppSelector } from "@/redux/hooks";
 
-export default function AdminHome() {
+export default function CarDetail() {
+    const { selectedCar } = useAppSelector(state => state.car);
+
     const timeSlots = [
         { value: '9:00am', label: '9:00am' },
         { value: '10:00am', label: '10:00am' },
@@ -13,32 +16,30 @@ export default function AdminHome() {
         { value: '12:00am', label: '12:00am' },
         { value: '1:00pm', label: '1:00pm' },
     ]
+
+    console.log('selectedCar ', selectedCar);
+    
+    if (!selectedCar) return;
+
     return (
         <main className="min-h-screen w-full ">
             <div className="h-[500px] w-full">
-                {/* <img src="/images/car.png" className="h-full w-full object-cover" /> */}
-                <SimpleSlider images={["/images/car.png", "/images/car.png", "/images/car.png"]} />
+                <SimpleSlider images={["/images/car.png", "/images/car.png"]} />
+                {/* <SimpleSlider images={selectedCar?.images} /> */}
             </div>
             <div className="container mx-auto md:max-w-[1050px] py-5">
                 <div className="flex flex-row flex-wrap pt-10">
                     <div className="mb-8 w-full lg:w-2/3 lg:pe-5">
                         <div className="bg-white rounded-xl shadow-md p-6">
-                            <h1 className="text-3xl mb-1 font-semibold">Mustang</h1>
-                            <h2 className="text-md font-light">Ford</h2>
+                            <h1 className="text-3xl mb-1 font-semibold">{selectedCar?.model}</h1>
+                            <h2 className="text-md font-light">{selectedCar?.make}</h2>
                             <span className="flex items-center mt-3 mb-1 text-xl font-bold">4.87 <IoIosStar className="mx-1" />(103 trips)</span>
                             <h2 className="text-lg font-semibold mt-5 mb-2">Description</h2>
-                            <p>⭐ CLEANED AND SANITIZED DAILY ⭐
-
-                                🥳 Thank you for renting with LittleGetaround.com - San Francisco’s #1 Car Rental Company! 🚙 Your car is cleaned, sanitized, and ready to go!
-
-                                This 2018 Nissan Versa is the perfect car to get around town or book for a weekend getaway! It is easy to park, fun to drive, and great on gas!
-
-                                ⛽BEST FUEL ECONOMY:
-                                40 HIGHWAY/31 CITY</p>
+                            <p>{selectedCar?.description}</p>
 
                             <h2 className="text-lg font-semibold mt-5 mb-2">Features</h2>
                             <div className="grid grid-cols-2 gap-4 max-w-[500px]">
-                                {[1, 2, 3, 4, 5].map(() =>
+                                {selectedCar.features?.map((feature) =>
                                     <div className="flex items-center">
                                         <img src="/images/car.png" className="h-[30px] w-[30px] object-contain" />
                                         <span className="ms-2">Backup camera</span>
@@ -49,7 +50,7 @@ export default function AdminHome() {
                     </div>
                     <div className="w-full lg:w-1/3">
                         <div className="bg-white rounded-xl shadow-md p-6">
-                            <span className="text-lg font-bold mb-1 text-right me-2">CAD $198.00 total</span>
+                            <span className="text-lg font-bold mb-1 text-right me-2">CAD ${selectedCar.price ?? 0} total</span>
                             <hr className="mt-5 mb-1" />
                             <div className="flex flex-wrap">
                                 <div className="me-5">

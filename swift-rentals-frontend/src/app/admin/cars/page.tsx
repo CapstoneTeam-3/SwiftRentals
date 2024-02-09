@@ -1,21 +1,11 @@
 "use client"
 import { fetchCars } from "@/redux/features/cars/carSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { Car } from "@/types";
 import { useEffect } from "react";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEdit } from "react-icons/md";
 
-type Car = {
-    make: string;
-    model: string;
-    manufacturing_year: string;
-    is_available: string;
-    price: string;
-    images: string;
-    description: string;
-    location: string;
-    features: string;
-};
 
 type CarTable = {
     headers: string[];

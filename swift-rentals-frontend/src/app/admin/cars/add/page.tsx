@@ -1,9 +1,15 @@
 "use client";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaRegSnowflake } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { carAPI } from "@/api/cars";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchFeatures } from "@/redux/features/features/featureSlice";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const CarSchema = z.object({
     make: z.string().min(1, { message: "Make is required" }),
@@ -11,38 +17,71 @@ const CarSchema = z.object({
     manufacturing_year: z.string().min(4, { message: "manufacturing_year must be valid" }).max(4),
     is_available: z.boolean({ required_error: "is_available is required" }),
     price: z.string().min(1, { message: "Price is required" }).max(3, { message: 'Price cannot be more than $999' }),
-    // images: z.string().min(1, { message: "Model is required" }),
     description: z.string().min(1, { message: "description is required" }),
     location: z.string().min(1, { message: "location is required" }),
+    images: z.any()
     // features: z.string().min(1, { message: "Model is required" }),
 });
 
 type CarSchemaType = z.infer<typeof CarSchema>;
 
 export default function AddCar() {
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    const feature = useAppSelector(state => state.feature)
+
     const {
         register,
         handleSubmit,
         formState: { errors }
     } = useForm<CarSchemaType>({ resolver: zodResolver(CarSchema) });
 
-    const onSubmit: SubmitHandler<CarSchemaType> = (data) => {
-        console.log(data);
-    }
+
+    useEffect(() => {
+        dispatch(fetchFeatures());
+    }, [])
+
+    const onSubmit: SubmitHandler<CarSchemaType> = async (data) => {
+        try {
+            const formData = new FormData();
+            formData.append("images", data.images[0]);
+            formData.append("make", data.make);
+            formData.append("model", data.model);
+            formData.append("manufacturing_year", data.manufacturing_year);
+            formData.append("is_available", String(data.is_available));
+            formData.append("price", data.price);
+            formData.append("description", data.description);
+            formData.append("location", data.location);
+            formData.append("Features", JSON.stringify(featuresIncluded));
+
+            const response = await carAPI.addCar(formData);
+
+            if (response?.data?.message) {
+                alert("Car added Successfully!");
+                router.back();
+            } else if (response?.data?.error) {
+                alert(response.data.error);
+            } else {
+                alert(response.data.error);
+                console.log("response - ", response);
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                const zodError = ZodError.create(error.response.data.error);
+                console.log(zodError.format());
+            } else {
+                console.error(error);
+            }
+        }
+    };
 
     const [featuresIncluded, setFeaturesIncluded] = useState<string[]>([]);
-
-    const features = [
-        { value: 'AC1', label: 'AC', icon: <FaRegSnowflake size={25} /> },
-        { value: 'AC2', label: 'AC', icon: <FaRegSnowflake size={25} /> },
-        { value: 'AC3', label: 'AC', icon: <FaRegSnowflake size={25} /> },
-    ]
 
     const handleFeatureIncluded = (value: string) => {
         const isFeatureIncluded = featuresIncluded.includes(value);
 
-        console.log('isFeatureIncluded ',isFeatureIncluded);
-        
+        console.log('isFeatureIncluded ', isFeatureIncluded);
+
         if (isFeatureIncluded) {
             setFeaturesIncluded(featuresIncluded.filter((feature) => feature !== value));
         } else {
@@ -55,6 +94,8 @@ export default function AddCar() {
             <div className="container mx-auto md:max-w-[1050px] py-5">
                 <h1 className="text-3xl mb-5">Add Car</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className="form">
+                    <input type="file" multiple {...register("images")} className="bg-gray-50 border mt-3 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+
                     <input placeholder="model" {...register("model")} className="bg-gray-50 border mt-3 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                     {errors.model && <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.model.message}</p>}
 
@@ -80,13 +121,14 @@ export default function AddCar() {
                     {errors.location && <p className="mt-2 text-sm text-red-600 dark:text-red-500">{errors.location.message}</p>}
 
                     <div className="flex flex-wrap gap-3 my-3">
-                        {features.map((feature, index) =>
+                        {feature?.featureList?.map((feature, index) =>
                             <div
                                 key={index}
-                                onClick={() => handleFeatureIncluded(feature.value)}
-                                className={`${featuresIncluded.includes(feature.value) ? 'bg-blue-100' : 'bg-white'} py-3 px-4 rounded-md shadow-sm`}>
-                                {feature.icon}
-                                <p>{feature.label}</p>
+                                onClick={() => handleFeatureIncluded(feature._id)}
+                                className={`${featuresIncluded.includes(feature._id) ? 'bg-blue-100' : 'bg-white'} py-3 px-4 rounded-md shadow-sm`}>
+                                {/* {feature.icon} */}
+                                <FaRegSnowflake size={25} />
+                                <p>{feature.name}</p>
                             </div>
                         )}
                     </div>
@@ -96,6 +138,7 @@ export default function AddCar() {
                     </button>
                 </form>
             </div>
+
         </main>
     )
 }
