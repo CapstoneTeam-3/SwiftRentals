@@ -14,10 +14,10 @@ const Nav = () => {
   const menuItems: string[] = [
     "Browse",
     "Profile",
-    "Profile",
+    "Admin",
     isLoggedIn ? "Logout" : "Login",
   ];
-  const menuLinks: string[] = ["/", "/", "/", "/auth/login"];
+  const menuLinks: string[] = ["/", "/", "/admin", "/auth/login"];
   return (
     <React.Fragment>
       <DesktopNav
