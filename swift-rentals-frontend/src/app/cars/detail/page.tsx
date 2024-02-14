@@ -39,10 +39,10 @@ export default function CarDetail() {
 
                             <h2 className="text-lg font-semibold mt-5 mb-2">Features</h2>
                             <div className="grid grid-cols-2 gap-4 max-w-[500px]">
-                                {selectedCar.features?.map((feature) =>
+                                {selectedCar?.Features?.map((feature) =>
                                     <div className="flex items-center">
                                         <img src="/images/car.png" className="h-[30px] w-[30px] object-contain" />
-                                        <span className="ms-2">Backup camera</span>
+                                        <span className="ms-2">{feature?.name}</span>
                                     </div>
                                 )}
                             </div>

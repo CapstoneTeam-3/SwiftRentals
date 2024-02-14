@@ -1,7 +1,9 @@
 "use client"
-import { fetchCars } from "@/redux/features/cars/carSlice";
+import { carAPI } from "@/api/cars";
+import { fetchCars, setSelectedCar } from "@/redux/features/cars/carSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Car } from "@/types";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEdit } from "react-icons/md";
@@ -13,19 +15,32 @@ type CarTable = {
 };
 
 const car_table: CarTable = {
-    headers: ["Make", "Model", "Manufacturing Year", "Is Available", "Price", "Images", "Description", "Location", "Features"],
-    cols: ["make", "model", "manufacturing_year", "is_available", "price", "images", "description", "location", "features"]
+    headers: ["Make", "Model", "Manufacturing Year", "Is Available", "Price", "Description", "Location", "Features"],
+    cols: ["make", "model", "manufacturing_year", "is_available", "price", "description", "location", "Features"]
 }
 
 
 export default function Cars() {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const car = useAppSelector(state => state.car);
-    console.log('car ', car);
 
     useEffect(() => {
-        dispatch(fetchCars());
-    }, [])
+        dispatch(fetchCars(1));
+    }, []);
+
+    const handleDeleteClick = (id: string) => {
+        carAPI.deleteCar(id).then((response) => {
+            dispatch(fetchCars(1));
+        }).catch((error) => {
+            console.log('deleteCar ', error?.message);
+        });
+    }
+    
+    const handleEditClick = (item: Car) => {
+        dispatch(setSelectedCar(item));
+        router.push('/admin/cars/edit');
+    }
 
 
     return (
@@ -53,7 +68,7 @@ export default function Cars() {
                     <th scope="col" className="px-6 py-3">
                         Sr.
                     </th>
-                    {car_table.headers.map((header, index) => <th scope="col" className="px-6 py-3">
+                    {car_table.headers.map((header, index) => <th key={index} scope="col" className="px-6 py-3">
                         {header}
                     </th>
                     )}
@@ -64,18 +79,28 @@ export default function Cars() {
             </thead>)
     }
 
-    function TableRow(rowIndex: number, item: never) {
+    function TableRow(rowIndex: number, item: Car) {
         return <tr key={rowIndex} className="bg-white border-b hover:bg-gray-50">
             <td className="px-6 py-4">
                 {rowIndex + 1}
             </td>
             {car_table.cols.map((col, colIndex) => <td key={colIndex} className="px-6 py-4">
-                {item[col]}
+                {col === "Features" ? item.Features.map(feature => feature.name).join(', ')
+                    :
+                    item[col]}
             </td>
             )}
             <td className="px-6 py-4 flex items-center gap-4">
-                <MdOutlineModeEdit color="#FBE41D" size={25} />
-                <MdOutlineDeleteOutline color="#DA131A" size={25} />
+                <button
+                    className="p-2 rounded-md bg-white shadow-md border-1"
+                    onClick={() => handleEditClick(item)}>
+                    <MdOutlineModeEdit color="#FBE41D" size={25} />
+                </button>
+                <button
+                    className="p-2 rounded-md bg-white shadow-md border-1"
+                    onClick={() => handleDeleteClick(item?._id)}>
+                    <MdOutlineDeleteOutline color="#DA131A" size={25} />
+                </button>
             </td>
         </tr>;
     }

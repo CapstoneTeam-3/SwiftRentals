@@ -25,9 +25,10 @@ const CarSchema = z.object({
 
 type CarSchemaType = z.infer<typeof CarSchema>;
 
-export default function AddCar() {
+export default function EditCar() {
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const { selectedCar } = useAppSelector(state => state.car)
     const feature = useAppSelector(state => state.feature)
 
     const {
@@ -53,13 +54,6 @@ export default function AddCar() {
             formData.append("description", data.description);
             formData.append("location", data.location);
             formData.append("Features", JSON.stringify(featuresIncluded));
-
-            const response = await carAPI.addCar(formData);
-
-            if (response?.data?.message) {
-                alert("Car added Successfully!");
-                router.back();
-            }
         } catch (error) {
             console.error(error);
         }
@@ -82,7 +76,7 @@ export default function AddCar() {
     return (
         <main className="min-min-h-screen w-full bg-[#f1f1fc]">
             <div className="container mx-auto md:max-w-[1050px] py-5">
-                <h1 className="text-3xl mb-5">Add Car</h1>
+                <h1 className="text-3xl mb-5">Edit Car</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className="form">
                     <input type="file" multiple {...register("images")} className="bg-gray-50 border mt-3 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
 

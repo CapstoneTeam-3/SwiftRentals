@@ -8,7 +8,7 @@ export type Car = {
     images: string[];
     description: string;
     location: string;
-    features: [];
+    Features: Feature[];
 };
 
 export type Feature = {

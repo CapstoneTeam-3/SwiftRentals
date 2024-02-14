@@ -4,15 +4,15 @@ import { Car } from '@/types';
 
 export const fetchCars = createAsyncThunk(
     'cars/fetch',
-    async () => {
-        const response = await carAPI.getCarList();
+    async (page: number) => {
+        const response = await carAPI.getCarList({ page });
         return response.data
     },
 )
 
 interface CarState {
     selectedCar: Car | null,
-    carList: [],
+    carList: any[],
     success: Boolean,
     loading: Boolean,
     error: string | null;
@@ -44,28 +44,28 @@ const carSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchCars.pending, (state, action) => {
-            console.log('Fetch Cars Called-------------------');
-
-            state.success = false;
+            Object.assign(state, initialState);
             state.loading = true;
-            state.error = "";
-            state.carList = []
         })
         builder.addCase(fetchCars.fulfilled, (state, action) => {
             console.log('Fetch Cars res - ' + JSON.stringify(action.payload));
             state.success = true;
             state.loading = false;
             state.error = "";
-            state.carList = action.payload?.cars;
-            state.page = action.payload?.page;
-            state.pageSize = action.payload?.pageSize;
-            state.totalCars = action.payload?.totalCars;
-            state.totalPages = action.payload?.totalPages;
+            state.page = Number(action.payload?.page);
+            state.pageSize = Number(action.payload?.pageSize);
+            state.totalCars = Number(action.payload?.totalCars);
+            state.totalPages = Number(action.payload?.totalPages);
+
+            if (action.payload?.page === "1") {
+                state.carList = action.payload?.cars;
+            } else {
+                state.carList = [...state?.carList, ...action.payload?.cars];
+            }
         })
         builder.addCase(fetchCars.rejected, (state, action) => {
-            console.log('Fetch Cars error - ' + action?.error);
-            state.success = false;
-            state.loading = false;
+            console.log('Fetch Cars error - ' + JSON.stringify(action?.error));
+            Object.assign(state, initialState);
             state.error = action?.error?.message ?? 'An error occurred';
         })
     },

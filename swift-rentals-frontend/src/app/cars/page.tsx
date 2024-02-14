@@ -18,7 +18,7 @@ export default function CarList() {
     console.log('car ', car);
 
     useEffect(() => {
-        dispatch(fetchCars());
+        dispatch(fetchCars(1));
     }, [])
 
     const handleCarClick = (car: Car) => {
@@ -39,7 +39,7 @@ export default function CarList() {
                         <div onClick={() => handleCarClick(item)} key={index} className="flex flex-col flex-wrap border bg-white rounded-2xl overflow-hidden md:flex-row">
                             <div className="w-full md:w-[300px]">
                                 <img
-                                    src={item?.images[0]}
+                                    src={`data:image/png;base64, ${item?.images[0]}`}
                                     className="h-[180px] w-full object-cover bg-[#f7f4f4]"
                                     onError={(e) => { (e.target as HTMLImageElement).src = '/images/car-placeholder.png' }}
                                     alt="Car"
