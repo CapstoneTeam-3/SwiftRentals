@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <div className="w-1/2 h-screen relative">
+    <div className="w-1/2 min-h-screen relative">
       <Image
         className="absolute bottom-32 right-72"
         src={`/images/payment.png`}

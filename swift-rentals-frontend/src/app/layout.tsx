@@ -5,6 +5,8 @@ import { Bounce, ToastContainer } from "react-toastify";
 import Footer from "./components/footer/Footer";
 import DesktopNav from "./components/nav/DesktopNav";
 import MobileNav from "./components/nav/MobileNav";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,8 +20,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const menuItems: string[] = ["Browse", "Profile", "Profile", "Login"];
-  const menuLinks: string[] = ["/", "/", "/", "/login"];
+  const menuItems: string[] = ["Browse", "Profile", "Profile", "Login", "Admin", "Cars", "Add Car", "User Cars"];
+  const menuLinks: string[] = ["/", "/", "/", "/login", "/admin", "/admin/cars", "/admin/cars/add", "/cars"];
   return (
     <html lang="en">
       <body className={inter.className}>
