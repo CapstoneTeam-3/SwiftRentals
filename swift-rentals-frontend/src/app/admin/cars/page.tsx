@@ -44,9 +44,8 @@ export default function Cars() {
 
 
     return (
-        <main className="min-h-screen w-full bg-[#f1f1fc]">
+        <main className="min-h-screen w-full">
             <div className="container mx-auto md:max-w-[1050px] py-5">
-                <h1 className="text-3xl mb-5">Cars List</h1>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left text-gray-500">
                         {TableHeader()}

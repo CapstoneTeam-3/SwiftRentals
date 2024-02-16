@@ -49,12 +49,16 @@ export default function MobileNav({
           <IoClose
             onClick={menuClickHandler}
             size={24}
+            role="button"
+            data-testid="close-icon"
             className="m-3 cursor-pointer hover:scale-110"
           />
         ) : (
           <IoMenu
             onClick={menuClickHandler}
+            role="button"
             size={24}
+            data-testid="hamburger-icon"
             className="m-3 cursor-pointer hover:scale-110"
           />
         )}
