@@ -3,9 +3,11 @@
 import { logoutUser } from "@/app/auth/login/userSlice";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import {
   BsMoonStarsFill as DarkIcon,
+  BsSunFill as LightIcon,
   BsGearFill as SettingsIcon,
 } from "react-icons/bs";
 import { useDispatch } from "react-redux";
@@ -22,6 +24,14 @@ export default function DesktopNav({
   isLoggedIn: boolean;
 }) {
   const dispatch = useDispatch();
+
+  const [activeTheme, setActiveTheme] = useState("light");
+
+  useEffect(() => {
+    document.body.dataset.theme = activeTheme;
+    console.log("dependecies changed");
+  }, [activeTheme]);
+
   return (
     <nav className={`${className} h-16 w-full`}>
       <div className="flex items-center ">
@@ -72,7 +82,11 @@ export default function DesktopNav({
               "m-4 cursor-pointer hover:scale-125 transition ease-in-out",
           }}
         >
-          <DarkIcon />
+          {activeTheme === "light" ? (
+            <DarkIcon onClick={() => setActiveTheme("dark")} />
+          ) : (
+            <LightIcon onClick={() => setActiveTheme("light")} />
+          )}
           <SettingsIcon />
         </IconContext.Provider>
       </div>
