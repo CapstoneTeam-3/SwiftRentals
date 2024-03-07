@@ -1,15 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiSolidMessageDetail as MessageIcon } from "react-icons/bi";
 import {
   RiArrowDropDownLine as DropDownIcon,
   RiArrowDropUpLine as DropUpIcon,
 } from "react-icons/ri";
 import { ChatItem } from "./ChatItem";
+import { chatAPI } from "@/api/chat";
 
 export function ChatDrawer() {
+  useEffect(() => {
+    // chatAPI.getChatList()
+  }, []);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   return (
     <div className="z-50 bg-white shadow-2xl border border-gray-300 border-b-0 rounded-xl py-2 px-5 fixed bottom-0 right-24">

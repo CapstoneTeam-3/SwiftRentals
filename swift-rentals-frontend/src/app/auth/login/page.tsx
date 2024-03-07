@@ -70,7 +70,7 @@ export default function Page() {
         if (response.status == 200) {
           console.log(response);
           //if success store token in redux store
-          dispatch(setUser(response.data.token));
+          dispatch(setUser(response.data));
           toast.success("Login Successfull!");
           router.push("/");
         }

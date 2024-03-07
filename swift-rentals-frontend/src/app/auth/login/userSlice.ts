@@ -6,18 +6,23 @@ export const userSlice = createSlice({
   initialState: {
     isLoggedIn: false,
     token: null,
+    user: null,
   },
   reducers: {
     setUser: (state, action) => {
       if (action.payload) {
+        console.log(action.payload.user, action.payload.token);
+
         state.isLoggedIn = true;
-        state.token = action.payload;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
       }
     },
     logoutUser: (state) => {
       toast.success("Logged out successfully!");
       state.isLoggedIn = false;
       state.token = null;
+      state.user = null;
     },
   },
 });
