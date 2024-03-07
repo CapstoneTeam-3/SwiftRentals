@@ -59,7 +59,7 @@ const ManageAvailability = (carId) => {
     }
 
     try {
-      const response = await carAPI.addAvailability(data);
+      const response = await carAPI.addAvailabilityCreate(data);
       if (response?.data?.message) {
         alert("Car added Successfully!");
     }
@@ -68,7 +68,19 @@ const ManageAvailability = (carId) => {
     }
   };
 
+  const getCarAvailablityData = async () => {
+    try {
+      const response = await carAPI.listAvailability(carId.carId);
+      console.log(response);
+    } catch (error) {
+      console.error("List availability", error);
+      
+    }
+  }
 
+  useEffect(() => {
+    getCarAvailablityData()
+  }, [])
 
 
   return (
