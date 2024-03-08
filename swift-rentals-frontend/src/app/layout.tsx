@@ -7,6 +7,7 @@ import DesktopNav from "./components/nav/DesktopNav";
 import MobileNav from "./components/nav/MobileNav";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";

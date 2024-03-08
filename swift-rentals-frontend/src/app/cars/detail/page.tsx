@@ -17,7 +17,7 @@ export default function CarDetail() {
         { value: '1:00pm', label: '1:00pm' },
     ]
 
-    console.log('selectedCar ', selectedCar);
+    // console.log('selectedCar ', selectedCar);
     
     if (!selectedCar) return;
 

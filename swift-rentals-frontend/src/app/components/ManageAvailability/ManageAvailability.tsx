@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Datepicker from "react-tailwindcss-datepicker";
 import { carAPI } from "@/api/cars";
+import { toast } from "react-toastify";
 
-const ManageAvailability = (carId) => {
+const ManageAvailability = ({carId, onCloseModal}) => {
 
 
   const [dateRange, setDateRange] = useState({
@@ -18,6 +19,8 @@ const ManageAvailability = (carId) => {
 
     const startDate = new Date(newDateRange.startDate);
     const endDate = new Date(newDateRange.endDate);
+    startDate.setDate(startDate.getDate() + 1);
+    endDate.setDate(endDate.getDate() + 1);
     const datesArray = [];
 
     while (startDate <= endDate) {
@@ -28,12 +31,24 @@ const ManageAvailability = (carId) => {
     setAllDates(datesArray);
 };
 
-  const handleRemoveDate = (dateToRemove) => {
+  const handleRemoveDate = async (dateToRemove) => {
     const updatedRanges = [...allDates];
     let indexOfSelectedDate = updatedRanges.findIndex(
       (date) => date === dateToRemove
     );
     updatedRanges.splice(indexOfSelectedDate, 1);
+
+    const updateDate = {
+      "car_id": carId,
+      "dates": [dateToRemove]
+    }
+
+    try {
+      await carAPI.deleteAvailability(updateDate);
+    } catch (error) {
+      console.error(error);
+    }
+
     setAllDates([...updatedRanges]);
   };
 
@@ -45,8 +60,8 @@ const ManageAvailability = (carId) => {
         </p>
       );
     } else{ return (
-      <div className="md:absolute md:bottom-11 md:right-6">
-        <button className="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center" onClick={() => submitData()}>Add Dates</button>
+      <div className="flex justify-center m-2">
+        <button className="mt-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-28 sm:w-auto px-5 py-2.5 text-center" onClick={() => submitData()}>Add Dates</button>
       </div>
     )}
   };
@@ -54,14 +69,15 @@ const ManageAvailability = (carId) => {
   const submitData = async () => {
 
     const data = {
-        "car_id": carId.carId,
+        "car_id": carId,
         "dates": allDates
     }
 
     try {
       const response = await carAPI.addAvailabilityCreate(data);
       if (response?.data?.message) {
-        alert("Car added Successfully!");
+        toast.success("Car availability added Successfully!");
+        onCloseModal()
     }
     } catch (error) {
       console.error(error);
@@ -70,8 +86,14 @@ const ManageAvailability = (carId) => {
 
   const getCarAvailablityData = async () => {
     try {
-      const response = await carAPI.listAvailability(carId.carId);
-      console.log(response);
+      const response = await carAPI.listAvailability(carId);
+      
+      let listDate = []
+      const renderedElements = response.data.availability.map(item => {
+        listDate.push(new Date(item.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }));
+      })
+      setAllDates(listDate);
+
     } catch (error) {
       console.error("List availability", error);
       
@@ -84,7 +106,7 @@ const ManageAvailability = (carId) => {
 
 
   return (
-    <div className="w-full min-h-svh">
+    <>
       <h1 className="text-center text-3xl sm:text-4xl lg:text-6xl font-semibold mt-14 mb-3">
         Manage Availability
       </h1>
@@ -98,7 +120,7 @@ const ManageAvailability = (carId) => {
           placeholder="Select Date Range"
         />
 
-        <div className="w-11/12 sm:w-8/12 mt-3 shadow-lg rounded-lg m-auto h-full">
+        <div className="w-11/12 sm:w-8/12 mt-3 shadow-lg rounded-lg m-auto h-11/12 p-4">
           <p className="text-xl font-semibold text-center my-2">
             Selected Date Ranges:
           </p>
@@ -114,10 +136,10 @@ const ManageAvailability = (carId) => {
                 </button>
               </li>
             ))}
-            {checkSelectedDates()}
           </ul>
+            {checkSelectedDates()}
         </div>
-    </div>
+    </>
   );
 };
 
