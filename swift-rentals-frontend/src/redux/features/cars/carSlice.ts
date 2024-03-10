@@ -48,7 +48,6 @@ const carSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(fetchCars.fulfilled, (state, action) => {
-            console.log('Fetch Cars res - ' + JSON.stringify(action.payload));
             state.success = true;
             state.loading = false;
             state.error = "";
@@ -64,7 +63,6 @@ const carSlice = createSlice({
             }
         })
         builder.addCase(fetchCars.rejected, (state, action) => {
-            console.log('Fetch Cars error - ' + JSON.stringify(action?.error));
             Object.assign(state, initialState);
             state.error = action?.error?.message ?? 'An error occurred';
         })

@@ -15,4 +15,19 @@ export const carAPI = {
     deleteCar: (id: string) => {
         return axios.delete(`${BASEURL}/car/delete-car/${id}`)
     },
+    addAvailabilityCreate: (formData: object) =>{
+        return axios.post(`${BASEURL}/car/add-availability/`,formData, {
+        })
+    },
+    listAvailability: (id: string) => {
+        return axios.get(`${BASEURL}/car/list-availability?car_id=${id}`)
+    },
+    deleteAvailability: (data: object) => {
+        return axios.delete(`${BASEURL}/car/delete-availability/`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: data,
+        });
+    }
 }
