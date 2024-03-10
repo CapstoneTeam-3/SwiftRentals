@@ -9,6 +9,7 @@ import {
   BsGearFill as SettingsIcon,
 } from "react-icons/bs";
 import { useDispatch } from "react-redux";
+import { useState } from "react";
 
 export default function DesktopNav({
   menuItems,
@@ -22,6 +23,12 @@ export default function DesktopNav({
   isLoggedIn: boolean;
 }) {
   const dispatch = useDispatch();
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+
+  const toggleSubMenu = () => {
+    setIsSubMenuOpen(!isSubMenuOpen);
+  };
+
   return (
     <nav className={`${className} h-16 w-full`}>
       <div className="flex items-center ">
@@ -73,7 +80,21 @@ export default function DesktopNav({
           }}
         >
           <DarkIcon />
-          <SettingsIcon />
+          <SettingsIcon className="hover:rotate-180" onClick={toggleSubMenu} />
+
+          {isSubMenuOpen && (
+            <div className="absolute top-16 right-1 mt-2 p-2 bg-white shadow-lg rounded z-50">
+              <ul>
+                <li>
+                  <Link href="#">Profile</Link>
+                </li>
+                <li>
+                  <Link href="#">Your Requests</Link>
+                </li>
+              </ul>
+            </div>
+          )}
+
         </IconContext.Provider>
       </div>
     </nav>
