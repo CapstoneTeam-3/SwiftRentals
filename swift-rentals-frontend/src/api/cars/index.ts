@@ -29,5 +29,13 @@ export const carAPI = {
             },
             data: data,
         });
-    }
+    },
+    createCarBooking: (formData: any) => {
+        return axios.post(`${BASEURL}/booking/create/`, formData, {
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+    },
+
 }
