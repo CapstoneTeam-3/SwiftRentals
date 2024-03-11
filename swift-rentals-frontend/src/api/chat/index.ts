@@ -2,8 +2,9 @@ import axios from "axios";
 const BASEURL = "http://localhost:3001/api";
 
 export const chatAPI = {
-  getChatList: (userId: string) => {
-    return axios.get(`${BASEURL}/chat/get-chat-list?user-id=${userId}`);
+  getChatList: (userId: string | null) => {
+    // return axios.get(`${BASEURL}/chat/get-chat-list?user-id=${userId}`);
+    return axios.get(`${BASEURL}/chat/get-chat-list`);
   },
   addCar: (formData: any) => {
     return axios.post(`${BASEURL}/car/add-car/`, formData, {

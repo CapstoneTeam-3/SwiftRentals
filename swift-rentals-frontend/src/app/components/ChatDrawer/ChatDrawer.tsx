@@ -1,20 +1,49 @@
 "use client";
 
+import { chatAPI } from "@/api/chat";
+import { selectUser } from "@/app/auth/login/userSlice";
+import { RootState } from "@/redux/store";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { BiSolidMessageDetail as MessageIcon } from "react-icons/bi";
+import { IoArrowBackOutline as BackButton } from "react-icons/io5";
 import {
   RiArrowDropDownLine as DropDownIcon,
   RiArrowDropUpLine as DropUpIcon,
 } from "react-icons/ri";
+import { useSelector } from "react-redux";
 import { ChatItem } from "./ChatItem";
-import { chatAPI } from "@/api/chat";
+import { ChatList } from "./ChatList";
+import { ChatTab } from "./ChatTab";
 
 export function ChatDrawer() {
-  useEffect(() => {
-    // chatAPI.getChatList()
-  }, []);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [chats, setChats] = useState([]);
+  const [currentChat, setCurrentChat] = useState({ chatId: "", reciever: "" });
+  const userData = useSelector((state: RootState) => selectUser(state));
+  interface Chat {
+    _id: string;
+    user2: { _id: string };
+  }
+
+  useEffect(() => {
+    const getChatList = async () => {
+      const chatList = await chatAPI.getChatList(userData._id);
+      setChats(chatList.data.chatList);
+    };
+    getChatList();
+  }, [userData._id]);
+
+  const setChatTab = (chat: Chat) => {
+    console.log("chat:", chat);
+    setCurrentChat({
+      chatId: chat._id,
+      reciever:
+        userData._id === chat.user2._id ? chat.user1._id : chat.user2._id,
+    });
+    // setReciever("reciever");
+  };
+
   return (
     <div className="z-50 bg-white shadow-2xl border border-gray-300 border-b-0 rounded-xl py-2 px-5 fixed bottom-0 right-24">
       <div
@@ -23,7 +52,17 @@ export function ChatDrawer() {
         }}
         className="flex justify-center place-items-center gap-4 border-b-2 p-2"
       >
-        <MessageIcon />
+        {currentChat.reciever == "" ? (
+          <MessageIcon />
+        ) : (
+          <BackButton
+            onClick={() => {
+              setCurrentChat((prev) => {
+                return { ...prev, reciever: "" };
+              });
+            }}
+          />
+        )}
         <span className="text-xl">Chat Messaging</span>
         {isDrawerOpen ? (
           <DropDownIcon className="ml-10" />
@@ -33,16 +72,11 @@ export function ChatDrawer() {
       </div>
       {isDrawerOpen ? (
         <div className="h-[400px] m-2 transition-all ease-in animate-[popOpen_150ms_ease-in]">
-          <ChatItem
-            name="Gordon Freeman 1"
-            date="23-01-2024"
-            href="/images/profile.jpg"
-          />
-          <ChatItem
-            name="Gordon Freeman 2"
-            date="10-08-2022"
-            href="/images/profile.png"
-          />
+          {currentChat.reciever == "" ? (
+            <ChatList chats={chats} onClick={setChatTab} />
+          ) : (
+            <ChatTab sender={userData._id} chat={currentChat} />
+          )}
         </div>
       ) : (
         <div className="animate-[popClose_150ms_ease-in]" />
