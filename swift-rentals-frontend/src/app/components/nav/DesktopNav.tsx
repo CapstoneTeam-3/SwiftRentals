@@ -3,13 +3,14 @@
 import { logoutUser } from "@/app/auth/login/userSlice";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import {
   BsMoonStarsFill as DarkIcon,
+  BsSunFill as LightIcon,
   BsGearFill as SettingsIcon,
 } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
 
 export default function DesktopNav({
   menuItems,
@@ -23,6 +24,13 @@ export default function DesktopNav({
   isLoggedIn: boolean;
 }) {
   const dispatch = useDispatch();
+
+  const [activeTheme, setActiveTheme] = useState("light");
+
+  useEffect(() => {
+    document.body.dataset.theme = activeTheme;
+    console.log("dependecies changed");
+  }, [activeTheme]);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
 
   const toggleSubMenu = () => {
@@ -79,7 +87,11 @@ export default function DesktopNav({
               "m-4 cursor-pointer hover:scale-125 transition ease-in-out",
           }}
         >
-          <DarkIcon />
+          {activeTheme === "light" ? (
+            <DarkIcon onClick={() => setActiveTheme("dark")} />
+          ) : (
+            <LightIcon onClick={() => setActiveTheme("light")} />
+          )}
           <SettingsIcon className="hover:rotate-180" onClick={toggleSubMenu} />
 
           {isSubMenuOpen && (
