@@ -8,14 +8,14 @@ export default function Hero({ className }: { className: string | undefined }) {
         src={`/images/profile.png`}
         width={140}
         height={140}
-        alt="hero payment image"
+        alt="hero profile image"
       />
       <Image
         className="absolute top-12 left-80"
         src={`/images/chat.png`}
         width={140}
         height={140}
-        alt="hero payment image"
+        alt="hero chat image"
       />
 
       <Image
@@ -30,7 +30,7 @@ export default function Hero({ className }: { className: string | undefined }) {
         src={`/images/success.png`}
         width={140}
         height={220}
-        alt="hero payment image"
+        alt="hero success image"
       />
     </div>
   );

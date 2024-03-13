@@ -23,8 +23,8 @@ const FilterDropDown = ({
         onClick={toggleDropdown}
       >
         <MdHomeFilled size={28} />
-        {heading}
-        <div className="ml-auto">
+        <span className="hidden md:block">{heading}</span>
+        <div className="hidden md:block ml-auto">
           {showDropdown ? (
             <MdArrowDropUp size={28} />
           ) : (
@@ -41,7 +41,7 @@ const FilterDropDown = ({
           {filterItems.map((item: FilterItem, index) => (
             <li
               key={index}
-              className="font-semibold text-gray-400 text-center transition-transform hover:scale-110 cursor-pointer hover:text-sky-500"
+              className="font-semibold text-sm sm:text-md text-gray-400 text-center transition-transform hover:scale-110 cursor-pointer hover:text-sky-500"
             >
               <Link href={item.href}>{item.subheading}</Link>
             </li>

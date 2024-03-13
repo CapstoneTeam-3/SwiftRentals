@@ -6,6 +6,10 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { useDispatch } from "react-redux";
+import {
+  BsMoonStarsFill as DarkIcon,
+  BsGearFill as SettingsIcon,
+} from "react-icons/bs";
 
 export default function MobileNav({
   menuItems,
@@ -24,6 +28,11 @@ export default function MobileNav({
     setIsMenuOpen((prev) => !prev);
   };
   const dispatch = useDispatch();
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+
+  const toggleSubMenu = () => {
+    setIsSubMenuOpen(!isSubMenuOpen);
+  };
 
   return (
     <div className={className}>
@@ -45,16 +54,34 @@ export default function MobileNav({
             </h1>
           </Link>
         </div>
+        <SettingsIcon size={24} onClick={toggleSubMenu} />
+
+          {isSubMenuOpen && (
+            <div className="absolute top-16 right-1 mt-2 p-2 bg-white shadow-lg rounded z-50">
+              <ul>
+                <li>
+                  <Link href="#">Profile</Link>
+                </li>
+                <li>
+                  <Link href="#">Your Requests</Link>
+                </li>
+              </ul>
+            </div>
+          )}
         {isMenuOpen ? (
           <IoClose
             onClick={menuClickHandler}
             size={24}
+            role="button"
+            data-testid="close-icon"
             className="m-3 cursor-pointer hover:scale-110"
           />
         ) : (
           <IoMenu
             onClick={menuClickHandler}
+            role="button"
             size={24}
+            data-testid="hamburger-icon"
             className="m-3 cursor-pointer hover:scale-110"
           />
         )}

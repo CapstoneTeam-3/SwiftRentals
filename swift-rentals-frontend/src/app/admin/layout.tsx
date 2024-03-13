@@ -20,7 +20,7 @@ export default function AdminLayout({
 
   return (
     <section className="flex">
-      <div className="w-1/6 h-screen shadow bg-gray-100 rounded-md">
+      <div className="w-1/4 sm:w-1/6 h-screen shadow bg-gray-100 rounded-md">
         <ul className="p-5 flex flex-col m-1">
           <FilterDropDown
             heading="User"
@@ -30,10 +30,11 @@ export default function AdminLayout({
             ]}
           />
           <FilterDropDown
-            heading="sample item"
+            heading="Cars"
             filterItems={[
-              new FilterItem("subitem 1", "/admin"),
-              new FilterItem("subitem 2", "/admin"),
+              new FilterItem("List car", "/admin/cars"),
+              new FilterItem("Add car", "/admin/cars/add_car"),
+              new FilterItem("Edit car", "/admin/cars/edit_car"),
             ]}
           />
         </ul>
