@@ -9,6 +9,10 @@ export type Car = {
     description: string;
     location: string;
     Features: Feature[];
+    ratings: {
+        average: Number;
+        count: Number;
+    };
 };
 
 export type Feature = {

@@ -1,15 +1,34 @@
 "use client";
-import { IoIosStar } from "react-icons/io";
-import { FaMapLocationDot } from "react-icons/fa6";
-import { SlHeart } from "react-icons/sl";
+import { IoIosStar, IoIosStarOutline } from "react-icons/io";
 import SimpleSlider from "@/app/components/Slider";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Booking from "@/app/components/Booking/Booking";
+import Rating from 'react-rating';
+import { useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function CarDetail() {
   const { selectedCar } = useAppSelector((state) => state.car);
+  const [selectedRating, setSelectedRating] = useState<number>();
 
-  // console.log('selectedCar ', selectedCar);
+  const submitRating = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/rating/add-rating",
+        {
+          "user_id": "65d9762d267059450d0b11eb",
+          "car_id": selectedCar?._id,
+          "rating": selectedRating
+        }
+      );  
+      if (response.status == 200) {
+        toast.success("Rating Successfull!");
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.error);
+    }
+  }
 
   if (!selectedCar) return;
 
@@ -17,7 +36,6 @@ export default function CarDetail() {
     <main className="min-h-screen w-full p-1">
       <div className="h-[500px] w-full">
         <SimpleSlider images={["/images/car.png", "/images/car.png"]} />
-        {/* <SimpleSlider images={selectedCar?.images} /> */}
       </div>
       <div className="container mx-auto md:max-w-[1250px] py-5 px-1">
         <div className="flex flex-row flex-wrap pt-10">
@@ -28,9 +46,23 @@ export default function CarDetail() {
               </h1>
               <h2 className="text-md font-light">{selectedCar?.make}</h2>
               <span className="flex items-center mt-3 mb-1 text-xl font-bold">
-                4.87 <IoIosStar className="mx-1" />
-                (103 trips)
+                <>
+                {selectedCar?.ratings?.average} <IoIosStar color="#FCD71E" className="mx-1" />
+                ({selectedCar?.ratings?.count} trips)
+                </>
               </span>
+              <div className="mt-5">
+                <h2 className="text-lg font-semibold mt-5 mb-2">Provide Rating</h2>
+                <div className="flex items-center">
+                  <Rating
+                    onChange={(value: number) => setSelectedRating(value)}
+                    emptySymbol={<IoIosStarOutline color="#FCD71E" className="mx-1" size={25}/>}
+                    fullSymbol={<IoIosStar color="#FCD71E" className="mx-1" size={25} />} />
+                  <button onClick={submitRating} className="bg-black text-white font-semibold p-3 w-48 rounded-full hover:opacity-80 transition-opacity">
+                    Submit
+                  </button>
+                </div>
+              </div>
               <h2 className="text-lg font-semibold mt-5 mb-2">Description</h2>
               <p>{selectedCar?.description}</p>
 
@@ -49,11 +81,11 @@ export default function CarDetail() {
             </div>
           </div>
           <div className="w-full lg:w-1/3 shadow-md rounded-xl bg-white p-8">
-              <span className="text-lg font-bold mb-1 text-right me-2">
-                CAD ${selectedCar.price ?? 0} total
-              </span>
-              <hr className="mt-5 mb-1" />
-              <Booking carId = {selectedCar._id}/>
+            <span className="text-lg font-bold mb-1 text-right me-2">
+              CAD ${selectedCar.price ?? 0} total
+            </span>
+            <hr className="mt-5 mb-1" />
+            <Booking carId={selectedCar._id} />
           </div>
         </div>
       </div>
