@@ -6,8 +6,9 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { ChatDrawer } from "./components/ChatDrawer/ChatDrawer";
 import Footer from "./components/footer/Footer";
-import Nav from "./components/nav/Nav";
+import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
+import Nav from "./components/nav/Nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
