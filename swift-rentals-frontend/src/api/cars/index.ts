@@ -37,5 +37,17 @@ export const carAPI = {
             }
         });
     },
+    getAllBookingRequestsWithFilter: ({ user_id, active }: { user_id: string; active?: boolean }) => {
+        const queryParams = active ? `?user_id=${user_id}&active=${active}` : `?user_id=${user_id}`;
+        return axios.get(`${BASEURL}/booking/list/${queryParams}`)
+    },
+    bookingRequests: (formData : any ) => {
+        console.log(formData)
+        return axios.post(`${BASEURL}/booking/respond/`, formData, {
+            headers:{
+                "Content-Type": "application/json",
+            }
+        })
+    }
 
 }

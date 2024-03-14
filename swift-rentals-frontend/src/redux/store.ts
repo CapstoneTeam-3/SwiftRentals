@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import carReducer from "./features/cars/carSlice";
+import BookingReducer from "./features/booking/bookingSlice";
 import featureReducer from "./features/features/featureSlice";
 import userReducer from "@/app/auth/login/userSlice";
 
@@ -8,6 +9,7 @@ export const store = configureStore({
         car: carReducer,
         feature: featureReducer,
         user: userReducer,
+        booking: BookingReducer
     },
 });
 

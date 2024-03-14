@@ -89,7 +89,7 @@ export default function DesktopNav({
                   <Link href="#">Profile</Link>
                 </li>
                 <li>
-                  <Link href="#">Your Requests</Link>
+                  <Link href="/booking">Your Requests</Link>
                 </li>
               </ul>
             </div>
