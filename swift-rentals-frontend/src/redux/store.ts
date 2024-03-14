@@ -3,12 +3,14 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import carReducer from "./features/cars/carSlice";
+import BookingReducer from "./features/booking/bookingSlice";
 import featureReducer from "./features/features/featureSlice";
 
 const rootReducer = combineReducers({
   car: carReducer,
   feature: featureReducer,
   user: userReducer,
+  booking: BookingReducer
 });
 
 const persistConfig = {

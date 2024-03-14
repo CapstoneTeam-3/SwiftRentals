@@ -20,3 +20,15 @@ export type Feature = {
     icon: string;
     name: string;
 }
+
+export type Booking = {
+    _id: string;
+    start_date: string;
+    end_date: string; 
+    is_booked: string;
+    User: string;
+    Car: Car;
+    createdAt: string;
+    __v: number;
+}
+
