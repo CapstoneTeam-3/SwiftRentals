@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
+import { useSession } from 'next-auth/react';
 import {
   MdDateRange,
   MdDriveFileRenameOutline,
@@ -92,26 +93,15 @@ export default function Page() {
     try {
       //fire up all validations
       const validatedData = signupSchema.safeParse(formData);
-      console.log("Valid data:", validatedData);
       if (validatedData.success) {
-        //register user if validated
-        const response = await axios.post(
-          "http://localhost:3001/api/auth/register",
-          {
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            confirmPassword: formData.confirmPassword,
-            dob: formData.dob,
-            role: "car rental",
-          }
-        );
-        if (response.status == 200) {
-          toast.success("Successfully Registered!");
-          console.log(response);
-          //if success show switch to email component
-          setEmailSent(true);
-        }
+
+        sessionStorage.setItem('name', formData.name);
+        sessionStorage.setItem('email', formData.email);
+        sessionStorage.setItem('password', formData.password);
+        sessionStorage.setItem('confirmPassword', formData.confirmPassword);
+        sessionStorage.setItem('dob', formData.dob);
+        router.push("./User-Type-Selection")
+
       } else {
         for (const error of validatedData.error.errors) {
           //show any field errors
@@ -131,15 +121,6 @@ export default function Page() {
 
   return (
     <React.Fragment>
-      {emailSent ? (
-        <div className="flex flex-col place-items-center m-20">
-          <MdMarkEmailRead color="green" size={44} className="" />
-          <div className="text-gray-400 text-center ">
-            <span className="text-2xl block">Almost done!</span>a confirmation
-            email has been sent, please check your inbox.
-          </div>
-        </div>
-      ) : (
         <div className="w-[75%] min-h-[500px] shadow-2xl rounded-xl m-auto my-14 p-5 flex">
           <div className="w-full md:w-full  p-0 md:p-10 mt-4 flex flex-col place-content-center justify-center">
             <h3 className="font-bold text-3xl ">
@@ -234,7 +215,6 @@ export default function Page() {
             />
           </div>
         </div>
-      )}
     </React.Fragment>
   );
 }
