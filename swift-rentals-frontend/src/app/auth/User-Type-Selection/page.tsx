@@ -3,9 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useSession } from 'next-auth/react';
-import axios from "axios";
 import { MdMarkEmailRead } from "react-icons/md";
+import { authAPI } from "@/api/auth";
 
 export default function Page() {
 
@@ -25,19 +24,16 @@ export default function Page() {
   
   const submitForm = async () => {
     if(role){
-      const response = await axios.post(
-        "http://localhost:3001/api/auth/register",
-        {
-          name: name,
-          email: email,
-          password: password,
-          confirmPassword: confirmPassword,
-          dob: dob,
-          role: role,
-        }
-      );
+      const data = {
+        "name": name,
+        "email": email,
+        "password": password,
+        "confirmPassword": confirmPassword,
+        "dob": dob,
+        "role": role,
+      }
+      const response = await authAPI.signup(data);
       if (response.status == 200) {
-        sessionStorage.clear();
         toast.success("Successfully Registered!");
         setEmailSent(true);
       }

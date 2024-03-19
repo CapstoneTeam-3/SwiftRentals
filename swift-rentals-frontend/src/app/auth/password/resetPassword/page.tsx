@@ -1,7 +1,5 @@
 "use client";
 
-import axios from "axios";
-import { log } from "console";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
 import CustomFormField from "../../../ui/CustomFormField/CustomFormField";
+import { authAPI } from "@/api/auth";
 
 const forgetSchema = z
   .object({
@@ -65,16 +64,8 @@ export default function Page(props: any) {
         }));
       }
     } else {
-      const response = await axios(
-        `http://localhost:3001/api/auth/reset-password?token=${searchParams.token}`,
-        {
-          method: "post",
-          data: {
-            newPassword: formData.password,
-            confirmPassword: formData.confirmPassword,
-          },
-        }
-      );
+
+      const response = await authAPI.resetPassword(searchParams.token, formData.password, formData.confirmPassword);
       if (response.status == 200) {
         toast.success("Password changed successfully!");
         router.push("/auth/login");

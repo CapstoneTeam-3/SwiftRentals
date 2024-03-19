@@ -3,6 +3,7 @@
 import { logoutUser } from "@/app/auth/login/userSlice";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import {
@@ -25,11 +26,17 @@ export default function DesktopNav({
 }) {
   const dispatch = useDispatch();
 
+  const route = useRouter();
+
+  const handleLogout = () => {
+    route.push("/auth/login")
+    dispatch(logoutUser());
+  };
+
   const [activeTheme, setActiveTheme] = useState("light");
 
   useEffect(() => {
     document.body.dataset.theme = activeTheme;
-    console.log("dependecies changed");
   }, [activeTheme]);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
 
@@ -62,7 +69,7 @@ export default function DesktopNav({
             if (item === "Logout")
               return (
                 <button
-                  onClick={() => dispatch(logoutUser())}
+                  onClick={handleLogout}
                   key={i}
                   className="transition-transform hover:scale-110 cursor-pointer hover:text-blue-600"
                 >

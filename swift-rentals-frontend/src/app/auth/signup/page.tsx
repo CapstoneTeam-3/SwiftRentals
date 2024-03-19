@@ -1,13 +1,10 @@
 "use client";
 
-import axios from "axios";
-import { error, log } from "console";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEyeSlash, FaUserCircle } from "react-icons/fa";
-import { useSession } from 'next-auth/react';
 import {
   MdDateRange,
   MdDriveFileRenameOutline,
