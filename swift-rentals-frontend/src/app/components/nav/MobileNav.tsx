@@ -65,6 +65,9 @@ export default function MobileNav({
                 <li>
                   <Link href="/booking">Your Requests</Link>
                 </li>
+                <li>
+                  <Link href="/cars/wishlist">Your Wishlist</Link>
+                </li>
               </ul>
             </div>
           )}
