@@ -42,10 +42,25 @@ export const carAPI = {
         return axios.get(`${BASEURL}/booking/list/${queryParams}`)
     },
     bookingRequests: (formData : any ) => {
-        console.log(formData)
         return axios.post(`${BASEURL}/booking/respond/`, formData, {
             headers:{
                 "Content-Type": "application/json",
+            }
+        })
+    },
+    triggerToWishList: (car_id : string ) => {
+        return axios.post(`${BASEURL}/car/trigger-car-to-wishlist/` ,{ "car_id": car_id  }, {
+            headers:{
+                "Content-Type": "application/json",
+                "Authorization": "token"
+            }
+        })
+    },
+    getCarsInWishList: () => {
+        return axios.get(`${BASEURL}/car/get-cars-in-wishlist/`,{
+            headers:{
+                "Content-Type": "application/json",
+                "Authorization": "token"
             }
         })
     }

@@ -2,6 +2,7 @@
 import { IoIosStar } from "react-icons/io";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { SlHeart } from "react-icons/sl";
+import { FaHeart } from "react-icons/fa";
 import Dropdown from "../components/Dropdown";
 import { IoFilterSharp } from "react-icons/io5";
 import Link from "next/link";
@@ -14,19 +15,51 @@ import { MdOutlineBallot } from "react-icons/md";
 import { AiOutlineClose } from "react-icons/ai";
 import ManageAvailability from "../components/ManageAvailability/ManageAvailability";
 import Image from 'next/image';
+import { carAPI } from "@/api/cars";
+import { toast } from "react-toastify";
 
 export default function CarList() {
     const route = useRouter();
     const dispatch = useAppDispatch();
     const car = useAppSelector(state => state.car);
+    const [wishListCars, setwishListCars] = useState([]);
 
     useEffect(() => {
         dispatch(fetchCars(1));
+        getWishList()
     }, [])
 
     const handleCarClick = (car: Car) => {
         dispatch(setSelectedCar({ car }));
         route.push('/cars/detail');
+    }
+
+
+    const handleToWishClick = async (car_id: string) =>{
+        console.log(car_id);
+        try {
+            const response = await carAPI.triggerToWishList(car_id);
+            if (response?.data?.message) {
+                toast.success(response?.data?.message);
+                getWishList()
+            }
+        } catch (error) {
+            console.error(error);
+          }   
+    }
+
+
+    const getWishList = async () => {
+        try {
+            const responce = await carAPI.getCarsInWishList();
+
+            if (responce?.status == 200) {
+                const wishListCarIds = responce?.data?.carsInWishlist?.map((wishlist: { _id: string; }) => wishlist._id);
+                setwishListCars(wishListCarIds)   
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const [open, setOpen] = useState<String>("");
@@ -60,9 +93,13 @@ export default function CarList() {
                                     <div className="flex justify-between">
                                         <h2 onClick={() => handleCarClick(item)} className="text-xl font-bold">{item?.model}</h2>
                                         <div className="flex justify-end text-2xl sm:text-3xl">
-                                            <div className="bg-white rounded-md p-2 shadow-sm">
-                                                <SlHeart />
-                                            </div>
+                                        <div className="bg-white rounded-md p-2 shadow-sm">
+                                            {wishListCars && wishListCars.some(c => c === item._id) ? (
+                                                <FaHeart onClick={() => handleToWishClick(item._id)} /> 
+                                            ) : (
+                                                <SlHeart onClick={() => handleToWishClick(item._id)} />
+                                            )}
+                                        </div>
                                             <button onClick={() => onOpenModal(item?._id)} className="bg-white rounded-md p-2 shadow-sm"><MdOutlineBallot /></button>
                                             {open == item._id && (<div
                                                 className="fixed top-0 left-0 right-0 h-full overflow-y-auto backdrop-blur-md"

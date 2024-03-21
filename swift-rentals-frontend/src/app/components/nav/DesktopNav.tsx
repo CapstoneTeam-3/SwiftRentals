@@ -29,7 +29,6 @@ export default function DesktopNav({
 
   useEffect(() => {
     document.body.dataset.theme = activeTheme;
-    console.log("dependecies changed");
   }, [activeTheme]);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
 
@@ -102,6 +101,9 @@ export default function DesktopNav({
                 </li>
                 <li>
                   <Link href="/booking">Your Requests</Link>
+                </li>
+                <li>
+                  <Link href="/cars/wishlist">Your Wishlist</Link>
                 </li>
               </ul>
             </div>
