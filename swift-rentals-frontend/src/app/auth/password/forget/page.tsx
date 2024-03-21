@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEyeSlash, FaUserCircle, FaLock as Lock } from "react-icons/fa";
@@ -8,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
 import CustomFormField from "../../../ui/CustomFormField/CustomFormField";
+import { authAPI } from "@/api/auth";
 
 const forgetSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -19,20 +19,19 @@ export default function Page() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
 
-  const passwordChangeHandler = () => {
+  const passwordChangeHandler = async () => {
     setErrorData("");
     const validate = forgetSchema.safeParse({ email });
-    console.log(validate);
-    if (!validate.success) {
+    if (validate.success) {
+      const response = await authAPI.forgotPassword(email);
+      if (response.status == 200) {
+        toast.success("Check you email, Email send successfully");
+      }
+    } else {
       for (const error of validate.error.errors) {
         console.log(error);
         setErrorData(error.message);
       }
-    } else {
-      toast.success("Email sent! Please check your inbox.");
-      axios.post("http://localhost:3001/api/auth/forgot-password", {
-        email,
-      });
     }
   };
   return (

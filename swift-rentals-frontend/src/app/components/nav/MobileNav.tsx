@@ -10,6 +10,7 @@ import {
 } from "react-icons/bs";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 export default function MobileNav({
   menuItems,
@@ -32,6 +33,13 @@ export default function MobileNav({
 
   const toggleSubMenu = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
+  };
+
+  const route = useRouter();
+
+  const handleLogout = () => {
+    route.push("/auth/login")
+    dispatch(logoutUser());
   };
 
   return (
@@ -63,7 +71,10 @@ export default function MobileNav({
                   <Link href="#">Profile</Link>
                 </li>
                 <li>
-                  <Link href="#">Your Requests</Link>
+                  <Link href="/booking">Your Requests</Link>
+                </li>
+                <li>
+                  <Link href="/cars/wishlist">Your Wishlist</Link>
                 </li>
               </ul>
             </div>
@@ -96,7 +107,7 @@ export default function MobileNav({
             if (item === "Logout")
               return (
                 <button
-                  onClick={() => dispatch(logoutUser())}
+                  onClick={handleLogout}
                   key={i}
                   className="transition-transform hover:scale-110 cursor-pointer hover:text-blue-600"
                 >
