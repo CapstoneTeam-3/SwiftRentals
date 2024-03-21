@@ -9,10 +9,11 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
+import { setUser } from "../../../redux/features/user/userSlice";
 import CustomFormField from "../../ui/CustomFormField/CustomFormField";
+
 import { setUser } from "./userSlice";
 import { authAPI } from "@/api/auth";
-
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),

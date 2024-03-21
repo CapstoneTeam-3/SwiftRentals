@@ -1,15 +1,15 @@
 "use client";
 
-import { logoutUser } from "@/app/auth/login/userSlice";
+import { logoutUser } from "@/redux/features/user/userSlice";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import {
-  BsMoonStarsFill as DarkIcon,
-  BsSunFill as LightIcon,
-  BsGearFill as SettingsIcon,
+    BsMoonStarsFill as DarkIcon,
+    BsSunFill as LightIcon,
+    BsGearFill as SettingsIcon,
 } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 

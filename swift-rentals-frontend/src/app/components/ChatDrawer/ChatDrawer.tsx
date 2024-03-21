@@ -1,9 +1,8 @@
 "use client";
 
 import { chatAPI } from "@/api/chat";
-import { selectUser } from "@/app/auth/login/userSlice";
+import { selectIsLoggedIn, selectUser } from "@/redux/features/user/userSlice";
 import { RootState } from "@/redux/store";
-import Image from "next/image";
 import { ReactNode, useEffect, useState } from "react";
 import { BiSolidMessageDetail as MessageIcon } from "react-icons/bi";
 import { IoArrowBackOutline as BackButton } from "react-icons/io5";
@@ -12,7 +11,6 @@ import {
   RiArrowDropUpLine as DropUpIcon,
 } from "react-icons/ri";
 import { useSelector } from "react-redux";
-import { ChatItem } from "./ChatItem";
 import { ChatList } from "./ChatList";
 import { ChatTab } from "./ChatTab";
 
@@ -21,29 +19,33 @@ export function ChatDrawer() {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState({ chatId: "", reciever: "" });
   const userData = useSelector((state: RootState) => selectUser(state));
+  const userLoggedIn = useSelector((state: RootState) =>
+    selectIsLoggedIn(state)
+  );
+
   interface Chat {
     _id: string;
     user2: { _id: string };
   }
 
   useEffect(() => {
-    const getChatList = async () => {
+    (async function getChatList() {
       const chatList = await chatAPI.getChatList(userData._id);
       setChats(chatList.data.chatList);
-    };
-    getChatList();
+    })();
   }, [userData._id]);
 
   const setChatTab = (chat: Chat) => {
     console.log("chat:", chat);
     setCurrentChat({
       chatId: chat._id,
-      reciever:
-        userData._id === chat.user2._id ? chat.user1._id : chat.user2._id,
+      reciever: chat.user._id,
     });
     // setReciever("reciever");
   };
-
+  if (!userLoggedIn) {
+    return <div></div>;
+  }
   return (
     <div className="z-50 bg-white shadow-2xl border border-gray-300 border-b-0 rounded-xl py-2 px-5 fixed bottom-0 right-24">
       <div
@@ -71,7 +73,7 @@ export function ChatDrawer() {
         )}
       </div>
       {isDrawerOpen ? (
-        <div className="h-[400px] m-2 transition-all ease-in animate-[popOpen_150ms_ease-in]">
+        <div className="h-[400px] my-2 ms-2  transition-all ease-in animate-[popOpen_150ms_ease-in]">
           {currentChat.reciever == "" ? (
             <ChatList chats={chats} onClick={setChatTab} />
           ) : (

@@ -1,15 +1,15 @@
 "use client";
 
-import { logoutUser } from "@/app/auth/login/userSlice";
+import { logoutUser } from "@/redux/features/user/userSlice";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import {
+    BsMoonStarsFill as DarkIcon,
+    BsGearFill as SettingsIcon,
+} from "react-icons/bs";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { useDispatch } from "react-redux";
-import {
-  BsMoonStarsFill as DarkIcon,
-  BsGearFill as SettingsIcon,
-} from "react-icons/bs";
 import { useRouter } from "next/navigation";
 
 export default function MobileNav({
