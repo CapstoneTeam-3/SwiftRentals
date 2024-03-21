@@ -1,9 +1,15 @@
-import { selectUser } from "@/app/auth/login/userSlice";
-import CustomFormField from "@/app/ui/CustomFormField/CustomFormField";
+import { chatAPI } from "@/api/chat";
 import CustomMessageField from "@/app/ui/CustomMessageField/CustomMessageField";
+import { selectUser } from "@/redux/features/user/userSlice";
 import { RootState } from "@/redux/store";
-import { log } from "console";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  ReactElement,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { IoSend } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { io as socketIo } from "socket.io-client";
@@ -20,36 +26,32 @@ export function ChatTab({
   sender: string | null;
   chat: Chat;
 }) {
+  const bottomDiv = useRef();
   const userData = useSelector((state: RootState) => selectUser(state));
 
   const socket = useMemo(() => socketIo("http://localhost:3001"), []);
   const [socketId, setSocketId] = useState<string>();
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      chatList_id: "65d12eb29bb74e85fcd7921f",
-      sender_id: "65c6b22c03b67384c1d8b07b",
-      receiver_id: "65c6637ee30004c691fd17cb",
-      content: "message 1",
-    },
-    {
-      chatList_id: "65d12eb29bb74e85fcd7921f",
-      sender_id: "65c6b22c03b67384c1d8b07b",
-      receiver_id: "65c6637ee30004c691fd17cb",
-      content: "message 2",
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    (async function loadMessages() {
+      const messagesData = await chatAPI.getMessagesByChatId(chat.chatId);
+      console.log(messagesData.data.chats);
+
+      setMessages(messagesData.data.chats);
+    })();
+
     socket.on("connect", () => {
       setSocketId(socket.id);
       console.log("connected ", socket.id);
       console.log(sender, socketId);
+      bottomDiv.current.scrollIntoView();
     });
     socket.on("receive-message", (data) => {
       console.log("recive message");
-
       console.log(data);
+      bottomDiv.current.scrollIntoView();
       setMessages((prev) => {
         return [...prev, data];
       });
@@ -70,7 +72,6 @@ export function ChatTab({
   }, [socketId]);
 
   const sendMessage = () => {
-    console.log("message sent");
     const messageToSent = {
       chatList_id: chat.chatId,
       sender_id: sender,
@@ -78,32 +79,43 @@ export function ChatTab({
       content: message,
     };
     setMessages((prev) => {
-      return [...prev, messageToSent];
+      return [
+        ...prev,
+        {
+          chatListId: chat.chatId,
+          sender_user: sender,
+          receiver_user: chat.reciever,
+          content: message,
+        },
+      ];
     });
+    setMessage("");
     socket.emit("message", messageToSent);
+    bottomDiv.current.scrollIntoView();
   };
   return (
     <div>
-      <div className="w-full h-80 overflow-scroll">
+      <div className="w-72 flex flex-col h-80 text-wrap overflow-scroll">
         {messages.map((message, index) => {
-          if (message.sender_id === userData._id) {
+          if (message.sender_user === userData._id) {
             return (
-              <div key={index} className="p-4 px-2 text-left">
-                <span className="text-right bg-gray-200 m-3 p-3 rounded-lg ">
-                  {message.content}
-                </span>
+              <div className="flex max-w-72" key={index}>
+                <div className="p-4 bg-gray-200 mb-1 px-2 rounded-lg">
+                  <span className="text-wrap">{message.content}</span>
+                </div>
               </div>
             );
           } else {
             return (
-              <div key={index} className="p-4 px-2 text-right">
-                <span className="bg-gray-200 m-3 p-3 rounded-lg ">
-                  {message.content}
-                </span>
+              <div className="flex ms-auto max-w-72 text-right" key={index}>
+                <div className="ms-auto p-4 bg-gray-200 justify-items-end mb-1 px-2 rounded-lg">
+                  <span className="text-wrap ">{message.content}</span>
+                </div>
               </div>
             );
           }
         })}
+        <div ref={bottomDiv} />
       </div>
       <CustomMessageField
         icon={IoSend}

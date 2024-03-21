@@ -1,17 +1,13 @@
+import { getMessage } from "@reduxjs/toolkit/dist/actionCreatorInvariantMiddleware";
 import axios from "axios";
 const BASEURL = "http://localhost:3001/api";
 
 export const chatAPI = {
   getChatList: (userId: string | null) => {
-    // return axios.get(`${BASEURL}/chat/get-chat-list?user-id=${userId}`);
-    return axios.get(`${BASEURL}/chat/get-chat-list`);
+    return axios.get(`${BASEURL}/chat/get-chat-list?user_id=${userId}`);
   },
-  addCar: (formData: any) => {
-    return axios.post(`${BASEURL}/car/add-car/`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+  getMessagesByChatId: (chatId: string | null) => {
+    return axios.get(`${BASEURL}/chat/get-messages?chatList_id=${chatId}`);
   },
   deleteCar: (id: string) => {
     return axios.delete(`${BASEURL}/car/delete-car/${id}`);
