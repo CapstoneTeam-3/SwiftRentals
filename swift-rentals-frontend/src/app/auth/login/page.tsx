@@ -1,7 +1,5 @@
 "use client";
 
-import axios from "axios";
-import { log } from "console";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
 import CustomFormField from "../../ui/CustomFormField/CustomFormField";
 import { setUser } from "./userSlice";
+import { authAPI } from "@/api/auth";
+
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -57,19 +57,15 @@ export default function Page() {
     try {
       //fire up login schema to run all validation
       const validatedData = loginSchema.safeParse(formData);
-      console.log("Valid data:", validatedData);
+
       if (validatedData.success) {
-        //if success request backend for login
-        const response = await axios.post(
-          "http://localhost:3001/api/auth/login",
-          {
-            email: formData.email,
-            password: formData.password,
-          }
-        );
+        const response = await authAPI.login({
+          email: formData.email,
+          password: formData.password,
+        });
+
+
         if (response.status == 200) {
-          console.log(response);
-          //if success store token in redux store
           dispatch(setUser(response.data));
           toast.success("Login Successfull!");
           router.push("/");
