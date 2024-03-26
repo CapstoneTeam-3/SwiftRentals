@@ -17,7 +17,7 @@ const Nav = () => {
     "Admin",
     isLoggedIn ? "Logout" : "Login",
   ];
-  const menuLinks: string[] = ["/", "/", "/admin", "/auth/login"];
+  const menuLinks: string[] = ["/cars", "/", "/admin", "/auth/login"];
   return (
     <React.Fragment>
       <DesktopNav

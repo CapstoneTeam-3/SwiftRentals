@@ -12,7 +12,6 @@ import { ZodError, z } from "zod";
 import { setUser } from "../../../redux/features/user/userSlice";
 import CustomFormField from "../../ui/CustomFormField/CustomFormField";
 
-import { setUser } from "./userSlice";
 import { authAPI } from "@/api/auth";
 
 const loginSchema = z.object({
@@ -64,8 +63,7 @@ export default function Page() {
           email: formData.email,
           password: formData.password,
         });
-
-
+        
         if (response.status == 200) {
           dispatch(setUser(response.data));
           toast.success("Login Successfull!");
