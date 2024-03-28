@@ -2,6 +2,7 @@ import { chatAPI } from "@/api/chat";
 import CustomMessageField from "@/app/ui/CustomMessageField/CustomMessageField";
 import { selectUser } from "@/redux/features/user/userSlice";
 import { RootState } from "@/redux/store";
+import { Message } from "@/types";
 import {
   ChangeEvent,
   ReactElement,
@@ -26,13 +27,13 @@ export function ChatTab({
   sender: string | null;
   chat: Chat;
 }) {
-  const bottomDiv = useRef();
+  const bottomDiv = useRef<HTMLDivElement>(null);
   const userData = useSelector((state: RootState) => selectUser(state));
 
   const socket = useMemo(() => socketIo("http://localhost:3001"), []);
   const [socketId, setSocketId] = useState<string>();
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
     (async function loadMessages() {
@@ -46,12 +47,12 @@ export function ChatTab({
       setSocketId(socket.id);
       console.log("connected ", socket.id);
       console.log(sender, socketId);
-      bottomDiv.current.scrollIntoView();
+      bottomDiv.current?.scrollIntoView();
     });
     socket.on("receive-message", (data) => {
       console.log("recive message");
       console.log(data);
-      bottomDiv.current.scrollIntoView();
+      bottomDiv.current?.scrollIntoView();
       setMessages((prev) => {
         return [...prev, data];
       });
@@ -60,7 +61,7 @@ export function ChatTab({
       socket.off("connect");
       socket.off("receive-message");
     };
-  }, []);
+  }, [chat.chatId, sender, socket, socketId]);
 
   useEffect(() => {
     if (socketId) {
@@ -69,7 +70,7 @@ export function ChatTab({
         socketId,
       });
     }
-  }, [socketId]);
+  }, [socketId, sender, socket]);
 
   const sendMessage = () => {
     const messageToSent = {
@@ -78,12 +79,14 @@ export function ChatTab({
       receiver_id: chat.reciever,
       content: message,
     };
+    const senderString = sender ?? "";
+
     setMessages((prev) => {
       return [
         ...prev,
         {
           chatListId: chat.chatId,
-          sender_user: sender,
+          sender_user: senderString,
           receiver_user: chat.reciever,
           content: message,
         },
@@ -91,8 +94,9 @@ export function ChatTab({
     });
     setMessage("");
     socket.emit("message", messageToSent);
-    bottomDiv.current.scrollIntoView();
+    bottomDiv.current?.scrollIntoView();
   };
+
   return (
     <div>
       <div className="w-72 flex flex-col h-80 text-wrap overflow-scroll">

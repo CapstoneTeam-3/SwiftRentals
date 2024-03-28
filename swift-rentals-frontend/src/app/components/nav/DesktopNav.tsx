@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import {
-    BsMoonStarsFill as DarkIcon,
-    BsSunFill as LightIcon,
-    BsGearFill as SettingsIcon,
+  BsMoonStarsFill as DarkIcon,
+  BsSunFill as LightIcon,
+  BsGearFill as SettingsIcon,
 } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 
@@ -29,7 +29,7 @@ export default function DesktopNav({
   const route = useRouter();
 
   const handleLogout = () => {
-    route.push("/auth/login")
+    route.push("/auth/login");
     dispatch(logoutUser());
   };
 
@@ -116,9 +116,11 @@ export default function DesktopNav({
               </ul>
             </div>
           )}
-
         </IconContext.Provider>
       </div>
     </nav>
   );
 }
+DesktopNav.getInitialProps = async () => {
+  return {};
+};

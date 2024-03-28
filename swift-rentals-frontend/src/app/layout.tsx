@@ -6,9 +6,12 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { ChatDrawer } from "./components/ChatDrawer/ChatDrawer";
 import Footer from "./components/footer/Footer";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import Nav from "./components/nav/Nav";
+import { selectIsLoggedIn } from "@/redux/features/user/userSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +44,7 @@ export default function RootLayout({
     "/admin/cars/add",
     "/cars",
   ];
+
   return (
     <html lang="en">
       <body className={inter.className}>
