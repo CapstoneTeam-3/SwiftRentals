@@ -1,4 +1,5 @@
 import { carAPI } from "@/api/cars";
+import { chatAPI } from "@/api/chat";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Router from "next/router";
@@ -51,18 +52,26 @@ const Booking: React.FC<BookingProps> = ({ carId, car }) => {
       car_id: carId,
       user_id: "65c28bc1f817b57985878e72",
     };
-    console.log(car);
-    
+
+    try {
+      const response = await carAPI.createCarBooking(data);
+      if (response?.data?.message) {
+        router.push("/cars");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      const currentCar = await carAPI.getCarById(data.car_id);
+      const chatResponse = await chatAPI.createChatList(
+        currentCar.data.car.User,
+        data.user_id
+      );
+      console.log("current car", chatResponse);
+    } catch (error) {
+      console.error(error);
+    }
     router.push(`/cars/checkout/payment?amount=${car.price}`);
-    // try {
-    //   const response = await carAPI.createCarBooking(data);
-    //   if (response?.data?.message) {
-    //     router.push("/cars");
-    //     toast.success("Car Booking requested Successfully!");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
   };
   return (
     <div className="flex flex-wrap">
