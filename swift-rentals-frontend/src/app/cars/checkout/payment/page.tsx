@@ -12,7 +12,7 @@ const stripePromise = loadStripe(
   "pk_test_51OmOBbBCdwIluutviPAN8CbA7gW3jxo5GBZyJOFALxakpG0rsRgkc0QwKvLpaqvBLJ8qSVCS4elmpeyjabO96gUA00HfmF8oqp"
 );
 
-export default function Page(props) {
+export default function Page(props: any) {
   const [secret, setSecret] = React.useState(null);
   console.log("router : ", props.router);
   const searchParam = useSearchParams();
@@ -23,7 +23,7 @@ export default function Page(props) {
     const fetchSecret = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:3001/api/booking/payment-intent?amount=${amount}`
+          `http://localhost:3001/api/payment/intent?amount=${amount}`
         );
         setSecret(data.client_secret);
       } catch (error) {
@@ -31,7 +31,7 @@ export default function Page(props) {
       }
     };
     fetchSecret();
-  }, []);
+  }, [amount]);
 
   if (!secret) {
     return <div>loading</div>;
@@ -93,7 +93,6 @@ export default function Page(props) {
           <CheckoutForm />
         </Elements>
       </div>
-     
     </div>
   );
 }
