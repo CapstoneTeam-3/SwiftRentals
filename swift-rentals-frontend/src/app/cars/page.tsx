@@ -67,7 +67,7 @@ export default function CarList() {
     const onCloseModal = () => setOpen("");
 
     return (
-        <main className="min-h-screen w-full bg-[#f1f1fc]">
+        <main className="min-h-screen w-full">
             <div className="container mx-auto md:max-w-[1050px] py-5">
                 {Filter()}
                 <div className="mt-10 mb-8 flex flex-wrap justify-between items-baseline">
