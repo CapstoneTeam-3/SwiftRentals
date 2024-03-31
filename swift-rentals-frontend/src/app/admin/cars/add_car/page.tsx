@@ -1,13 +1,16 @@
 "use client";
 import { carAPI } from "@/api/cars";
 import { fetchFeatures } from "@/redux/features/features/featureSlice";
+import { selectToken } from "@/redux/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaRegSnowflake } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { z, ZodError } from "zod";
 
@@ -32,8 +35,14 @@ const CarSchema = z.object({
 type CarSchemaType = z.infer<typeof CarSchema>;
 
 export default function AddCar() {
-  const dispatch = useAppDispatch();
+  const token = useSelector((state: RootState) => selectToken(state));
   const router = useRouter();
+
+  if(!token){
+    toast.error("Please login first")
+    return router.push("/auth/login")
+  }
+  const dispatch = useAppDispatch();
   const feature = useAppSelector((state) => state.feature);
 
   const {
@@ -59,7 +68,7 @@ export default function AddCar() {
       formData.append("location", data.location);
       formData.append("Features", JSON.stringify(featuresIncluded));
 
-      const response = await carAPI.addCar(formData);
+      const response = await carAPI.addCar(formData, token);
 
       if (response?.data?.message) {
         alert("Car added Successfully!");

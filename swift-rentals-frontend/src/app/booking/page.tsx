@@ -11,9 +11,17 @@ import { useSelector } from 'react-redux';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { carAPI } from '@/api/cars';
 import { toast } from 'react-toastify';
+import { RootState } from '@/redux/store';
+import { selectToken } from '@/redux/features/user/userSlice';
 
 export default function BookingList() {
     const router = useRouter();
+    const token = useSelector((state: RootState) => selectToken(state));
+
+    if(!token){
+        toast.error("Please login first")
+        return router.push("/auth/login")
+    }
     const dispatch = useAppDispatch();
     const bookingList = useAppSelector((state) => state.booking.bookingList);
     const loading = useAppSelector((state) => state.booking.loading);
@@ -25,7 +33,7 @@ export default function BookingList() {
         }
     
         try {
-          const response = await carAPI.bookingRequests(data);
+          const response = await carAPI.bookingRequests(data, token);
           if (response?.data?.message) {
             toast.success(response?.data?.message);
             dispatch(fetchBooking({ user_id: '65c28bc1f817b57985878e72', active: false }));

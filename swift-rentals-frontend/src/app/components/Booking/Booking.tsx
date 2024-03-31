@@ -1,9 +1,12 @@
 import { carAPI } from "@/api/cars";
 import { chatAPI } from "@/api/chat";
+import { selectToken, selectUser } from "@/redux/features/user/userSlice";
+import { RootState } from "@/redux/store";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Router from "next/router";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const Datepicker = dynamic(() => import("react-tailwindcss-datepicker"), {
@@ -20,7 +23,11 @@ interface DateRange {
 }
 
 const Booking: React.FC<BookingProps> = ({ carId, car }) => {
+
+  const token = useSelector((state: RootState) => selectToken(state));
+  const userData = useSelector((state: RootState) => selectUser(state));
   const router = useRouter();
+
 
   const [range, setRange] = useState<DateRange>({
     startDate: new Date(),
@@ -50,11 +57,11 @@ const Booking: React.FC<BookingProps> = ({ carId, car }) => {
       start_date: range.startDate,
       end_date: range.endDate,
       car_id: carId,
-      user_id: "65c28bc1f817b57985878e72",
+      user_id: userData._id,
     };
 
     try {
-      const response = await carAPI.createCarBooking(data);
+      const response = await carAPI.createCarBooking(data, token);
       if (response?.data?.message) {
         router.push("/cars");
       }
@@ -62,7 +69,7 @@ const Booking: React.FC<BookingProps> = ({ carId, car }) => {
       console.error(error);
     }
     try {
-      const currentCar = await carAPI.getCarById(data.car_id);
+      const currentCar = await carAPI.getCarById(data.car_id, token);
       const chatResponse = await chatAPI.createChatList(
         currentCar.data.car.User,
         data.user_id

@@ -1,18 +1,31 @@
 "use client";
 
 import { CheckoutForm } from "@/app/components/CheckoutForm/CheckoutForm";
+import { selectToken } from "@/redux/features/user/userSlice";
+import { RootState } from "@/redux/store";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { MdShoppingCartCheckout as CheckoutIcon } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const stripePromise = loadStripe(
   "pk_test_51OmOBbBCdwIluutviPAN8CbA7gW3jxo5GBZyJOFALxakpG0rsRgkc0QwKvLpaqvBLJ8qSVCS4elmpeyjabO96gUA00HfmF8oqp"
 );
 
 export default function Page(props: any) {
+
+  const token = useSelector((state: RootState) => selectToken(state));
+  const router = useRouter();
+
+  if(!token){
+      toast.error("Please login first")
+      return router.push("/auth/login")
+  }
+
   const [secret, setSecret] = React.useState(null);
   console.log("router : ", props.router);
   const searchParam = useSearchParams();

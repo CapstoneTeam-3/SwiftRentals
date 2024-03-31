@@ -1,6 +1,22 @@
+"use client"
+import { selectToken } from "@/redux/features/user/userSlice";
+import { RootState } from "@/redux/store";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function AdminHome() {
+
+  const token = useSelector((state: RootState) => selectToken(state));
+  const router = useRouter();
+
+  if(!token){
+      toast.error("Please login first")
+      return router.push("/auth/login")
+  }
+
+
   const cards = [
     { value: "cars", label: "Cars" },
     { value: "admin", label: "Admin" },

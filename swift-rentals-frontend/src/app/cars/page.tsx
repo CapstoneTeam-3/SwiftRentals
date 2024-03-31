@@ -24,7 +24,13 @@ import ManageAvailability from "../components/ManageAvailability/ManageAvailabil
 import NoSSRWrapper from "../components/NoSSRWrapper/NoSSRWrapper";
 
 export default function CarList() {
+  const token = useSelector((state: RootState) => selectToken(state));
+
   const route = useRouter();
+  if(!token){
+    toast.error("Please login first")
+    return route.push("/auth/login")
+}
   const dispatch = useAppDispatch();
   const car = useAppSelector((state) => state.car);
   const [wishListCars, setwishListCars] = useState([]);
@@ -39,7 +45,6 @@ export default function CarList() {
     dispatch(setSelectedCar({ car }));
     route.push("/cars/detail");
   };
-  const token = useSelector((state: RootState) => selectToken(state));
 
   const handleToWishClick = async (car_id: string) => {
     try {
@@ -121,7 +126,7 @@ export default function CarList() {
                         {item?.model}
                       </h2>
                       <div className="flex justify-end text-2xl sm:text-3xl">
-                        <div className="bg-white rounded-md p-2 shadow-sm">
+                        <div className="bg-white rounded-md p-2 shadow-sm cursor-pointer">
                           {wishListCars &&
                           wishListCars.some((c) => c === item._id) ? (
                             <FaHeart

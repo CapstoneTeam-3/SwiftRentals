@@ -1,15 +1,25 @@
 "use client";
 
 import { carAPI } from "@/api/cars";
+import { selectToken } from "@/redux/features/user/userSlice";
+import { RootState } from "@/redux/store";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { PiShieldCheckFill as SuccessIcon } from "react-icons/pi";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Page() {
+  const token = useSelector((state: RootState) => selectToken(state));
   const router = useRouter();
+
+  if(!token){
+      toast.error("Please login first")
+      return router.push("/auth/login")
+  }
+
   useEffect(() => {
     toast.success("Car Booking requested Successfully!");
     toast.success("You can now chat with car owner!");

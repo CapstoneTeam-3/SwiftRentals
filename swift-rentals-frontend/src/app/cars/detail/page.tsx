@@ -5,6 +5,7 @@ import { selectToken } from "@/redux/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IoIosStar, IoIosStarOutline } from "react-icons/io";
 import Rating from "react-rating";
@@ -16,6 +17,12 @@ export default function CarDetail() {
   const [selectedRating, setSelectedRating] = useState<number>();
   
   const token = useSelector((state: RootState) => selectToken(state));
+  const router = useRouter();
+
+  if(!token){
+      toast.error("Please login first")
+      return router.push("/auth/login")
+  }
 
   const submitRating = async () => {
     try {

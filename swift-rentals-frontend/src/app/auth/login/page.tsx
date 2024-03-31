@@ -67,7 +67,7 @@ export default function Page() {
         if (response.status == 200) {
           dispatch(setUser(response.data));
           toast.success("Login Successfull!");
-          router.push("/");
+          router.push("/cars");
         }
       } else {
         for (const error of validatedData.error.errors) {
