@@ -1,16 +1,21 @@
 "use client";
-import { IoIosStar, IoIosStarOutline } from "react-icons/io";
-import SimpleSlider from "@/app/components/Slider";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Booking from "@/app/components/Booking/Booking";
-import Rating from "react-rating";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import SimpleSlider from "@/app/components/Slider";
+import { selectToken } from "@/redux/features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import axios from "axios";
+import { useState } from "react";
+import { IoIosStar, IoIosStarOutline } from "react-icons/io";
+import Rating from "react-rating";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function CarDetail() {
   const { selectedCar } = useAppSelector((state) => state.car);
   const [selectedRating, setSelectedRating] = useState<number>();
+  
+  const token = useSelector((state: RootState) => selectToken(state));
 
   const submitRating = async () => {
     try {
@@ -20,6 +25,12 @@ export default function CarDetail() {
           user_id: "65d9762d267059450d0b11eb",
           car_id: selectedCar?._id,
           rating: selectedRating,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
         }
       );
       if (response.status == 200) {

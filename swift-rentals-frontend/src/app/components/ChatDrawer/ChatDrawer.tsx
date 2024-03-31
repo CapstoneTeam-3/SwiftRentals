@@ -1,7 +1,11 @@
 "use client";
 
 import { chatAPI } from "@/api/chat";
-import { selectIsLoggedIn, selectUser } from "@/redux/features/user/userSlice";
+import {
+  selectIsLoggedIn,
+  selectToken,
+  selectUser,
+} from "@/redux/features/user/userSlice";
 import { RootState } from "@/redux/store";
 import React, { ReactNode, useEffect, useState } from "react";
 import { BiSolidMessageDetail as MessageIcon } from "react-icons/bi";
@@ -20,19 +24,21 @@ export function ChatDrawer() {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState({ chatId: "", reciever: "" });
   const userData = useSelector((state: RootState) => selectUser(state));
-  const [userLoggedIn, setUserLoggedIn] = useState("");
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
 
- 
+  const token = useSelector((state: RootState) => selectToken(state));
+
   const IsUserLoggedIn = useSelector((state: RootState) =>
     selectIsLoggedIn(state)
   );
   useEffect(() => {
+    setUserLoggedIn(IsUserLoggedIn);
     if (userData._id)
       (async function getChatList() {
-        const chatList = await chatAPI.getChatList(userData._id);
+        const chatList = await chatAPI.getChatList(userData._id, token);
         setChats(chatList.data.chatList);
       })();
-  }, [userData._id]);
+  }, [IsUserLoggedIn, token, userData._id]);
 
   const setChatTab = (chat: Chat) => {
     console.log("chat:", chat);
@@ -45,6 +51,7 @@ export function ChatDrawer() {
   if (typeof IsUserLoggedIn === "undefined") {
     return null;
   }
+  if (!userLoggedIn) return null;
   return (
     <React.Fragment>
       <div

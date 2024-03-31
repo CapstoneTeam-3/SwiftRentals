@@ -1,6 +1,6 @@
 import { chatAPI } from "@/api/chat";
 import CustomMessageField from "@/app/ui/CustomMessageField/CustomMessageField";
-import { selectUser } from "@/redux/features/user/userSlice";
+import { selectToken, selectUser } from "@/redux/features/user/userSlice";
 import { RootState } from "@/redux/store";
 import { Message } from "@/types";
 import {
@@ -27,6 +27,8 @@ export function ChatTab({
   sender: string | null;
   chat: Chat;
 }) {
+  const token = useSelector((state: RootState) => selectToken(state));
+
   const bottomDiv = useRef<HTMLDivElement>(null);
   const userData = useSelector((state: RootState) => selectUser(state));
 
@@ -37,7 +39,10 @@ export function ChatTab({
 
   useEffect(() => {
     (async function loadMessages() {
-      const messagesData = await chatAPI.getMessagesByChatId(chat.chatId);
+      const messagesData = await chatAPI.getMessagesByChatId(
+        chat.chatId,
+        token
+      );
       console.log(messagesData.data.chats);
 
       setMessages(messagesData.data.chats);
@@ -61,7 +66,7 @@ export function ChatTab({
       socket.off("connect");
       socket.off("receive-message");
     };
-  }, [chat.chatId, sender, socket, socketId]);
+  }, [chat.chatId, sender, socket, socketId, token]);
 
   useEffect(() => {
     if (socketId) {

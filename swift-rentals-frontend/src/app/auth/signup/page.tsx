@@ -15,17 +15,29 @@ import "react-toastify/dist/ReactToastify.css";
 import { ZodError, z } from "zod";
 import CustomFormField from "../../ui/CustomFormField/CustomFormField";
 
+const passwordRegex =
+  /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 const signupSchema = z
   .object({
     email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().refine((password) => password.trim().length > 0, {
-      message: "Password cannot be empty",
-    }),
-    confirmPassword: z
+    password: z
       .string()
-      .refine((password) => password.trim().length > 0, {
-        message: "Password cannot be empty",
+      .refine((password) => /[A-Z]/.test(password), {
+        message: "Password must contain at least one uppercase letter",
+      })
+      .refine((password) => /\d/.test(password), {
+        message: "Password must contain at least one number",
+      })
+      .refine((password) => /[@$!%*?&]/.test(password), {
+        message: "Password must contain at least one special character",
+      })
+      .refine((password) => password.length >= 8, {
+        message: "Password must be at least 8 characters long",
       }),
+    confirmPassword: z
+      .string({ required_error: "Confirm password cannot be empty" })
+      .min(1, { message: "confirm password cannot be empty" }),
     name: z
       .string({ required_error: "Name cannot be empty" })
       .min(1, { message: "Name cannot be empty" }),
@@ -91,14 +103,12 @@ export default function Page() {
       //fire up all validations
       const validatedData = signupSchema.safeParse(formData);
       if (validatedData.success) {
-
-        sessionStorage.setItem('name', formData.name);
-        sessionStorage.setItem('email', formData.email);
-        sessionStorage.setItem('password', formData.password);
-        sessionStorage.setItem('confirmPassword', formData.confirmPassword);
-        sessionStorage.setItem('dob', formData.dob);
-        router.push("./User-Type-Selection")
-
+        sessionStorage.setItem("name", formData.name);
+        sessionStorage.setItem("email", formData.email);
+        sessionStorage.setItem("password", formData.password);
+        sessionStorage.setItem("confirmPassword", formData.confirmPassword);
+        sessionStorage.setItem("dob", formData.dob);
+        router.push("./User-Type-Selection");
       } else {
         for (const error of validatedData.error.errors) {
           //show any field errors
@@ -118,100 +128,100 @@ export default function Page() {
 
   return (
     <React.Fragment>
-        <div className="w-[75%] min-h-[500px] shadow-2xl rounded-xl m-auto my-14 p-5 flex">
-          <div className="w-full md:w-full  p-0 md:p-10 mt-4 flex flex-col place-content-center justify-center">
-            <h3 className="font-bold text-3xl ">
-              Sign up <span className="text-blue-600">Swift</span>
-            </h3>
-            <p className="text-gray-400 mb-2 text-sm">
-              Enter details to signup for swiftrentals
-            </p>
+      <div className="w-[75%] min-h-[500px] shadow-2xl rounded-xl m-auto my-14 p-5 flex">
+        <div className="w-full md:w-full  p-0 md:p-10 mt-4 flex flex-col place-content-center justify-center">
+          <h3 className="font-bold text-3xl ">
+            Sign up <span className="text-blue-600">Swift</span>
+          </h3>
+          <p className="text-gray-400 mb-2 text-sm">
+            Enter details to signup for swiftrentals
+          </p>
 
-            <form onSubmit={handleSubmit} className="flex flex-col">
-              <div className="grid grid-cols-1  md:grid-cols-2">
-                <CustomFormField
-                  errorText={errorData.email}
-                  icon={FaUserCircle}
-                  placeholder="Enter your email"
-                  name="email"
-                  type="text"
-                  id="userEmail"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-                <CustomFormField
-                  errorText={errorData.name}
-                  icon={MdDriveFileRenameOutline}
-                  placeholder="Enter full name"
-                  name="name"
-                  type="text"
-                  id="userName"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                />
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            <div className="grid grid-cols-1  md:grid-cols-2">
+              <CustomFormField
+                errorText={errorData.email}
+                icon={FaUserCircle}
+                placeholder="Enter your email"
+                name="email"
+                type="text"
+                id="userEmail"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
+              <CustomFormField
+                errorText={errorData.name}
+                icon={MdDriveFileRenameOutline}
+                placeholder="Enter full name"
+                name="name"
+                type="text"
+                id="userName"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
 
-                <CustomFormField
-                  icon={FaEyeSlash}
-                  errorText={errorData.password}
-                  placeholder="Enter your password"
-                  name="password"
-                  type="password"
-                  id="userPassword"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                />
-                <CustomFormField
-                  icon={FaEyeSlash}
-                  errorText={errorData.confirmPassword}
-                  placeholder="confirm your password"
-                  name="confirmPassword"
-                  type="password"
-                  id="userConfirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                />
-                <CustomFormField
-                  errorText={errorData.dob}
-                  icon={MdDateRange}
-                  placeholder="Enter date of birth"
-                  name="dob"
-                  type="date"
-                  id="userDob"
-                  value={formData.dob}
-                  onChange={handleInputChange}
-                />
-                <input type="hidden" name="role" value={formData.role} />
-              </div>
-              <div className="w-3/4">
-                <p className="text-center text-red-500">{serverError}</p>
-              </div>
-              <button
-                type="submit"
-                className="bg-black text-white place-self-center font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
-              >
-                Sign up
-              </button>
-            </form>
-            <hr className="border-1 m-2" />
-            <div className="">
-              <p className="text-gray-400 text-center">
-                already have an account?
-                <span className="text-black font-semibold underline">
-                  <Link href="/auth/login">Sign in</Link>
-                </span>
-              </p>
+              <CustomFormField
+                icon={FaEyeSlash}
+                errorText={errorData.password}
+                placeholder="Enter your password"
+                name="password"
+                type="password"
+                id="userPassword"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+              <CustomFormField
+                icon={FaEyeSlash}
+                errorText={errorData.confirmPassword}
+                placeholder="confirm your password"
+                name="confirmPassword"
+                type="password"
+                id="userConfirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+              />
+              <CustomFormField
+                errorText={errorData.dob}
+                icon={MdDateRange}
+                placeholder="Enter date of birth"
+                name="dob"
+                type="date"
+                id="userDob"
+                value={formData.dob}
+                onChange={handleInputChange}
+              />
+              <input type="hidden" name="role" value={formData.role} />
             </div>
-          </div>
-          <div className="w-0 lg:w-2/4 relative flex">
-            <Image
-              src="/images/signup2.jpg"
-              alt="small login image"
-              className=" w-full rounded-xl shadow-xl hidden lg:block object-cover bottom-8"
-              width={400}
-              height={100}
-            />
+            <div className="w-3/4">
+              <p className="text-center text-red-500">{serverError}</p>
+            </div>
+            <button
+              type="submit"
+              className="bg-black text-white place-self-center font-semibold p-3 w-full sm:w-3/4 rounded-full mt-4 hover:opacity-80 transition-opacity"
+            >
+              Sign up
+            </button>
+          </form>
+          <hr className="border-1 m-2" />
+          <div className="">
+            <p className="text-gray-400 text-center">
+              already have an account?
+              <span className="text-black font-semibold underline">
+                <Link href="/auth/login">Sign in</Link>
+              </span>
+            </p>
           </div>
         </div>
+        <div className="w-0 lg:w-2/4 relative flex">
+          <Image
+            src="/images/signup2.jpg"
+            alt="small login image"
+            className=" w-full rounded-xl shadow-xl hidden lg:block object-cover bottom-8"
+            width={400}
+            height={100}
+          />
+        </div>
+      </div>
     </React.Fragment>
   );
 }

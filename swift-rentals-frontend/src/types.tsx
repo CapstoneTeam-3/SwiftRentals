@@ -15,6 +15,15 @@ export type Car = {
   };
 };
 
+export interface RegisterData {
+  email?: string | null;
+  password?: string | null;
+  name: string | null;
+  confirmPassword: string | null;
+  dob: string | null;
+  role: string | null;
+}
+
 export interface Chat {
   [x: string]: any;
   _id: string;

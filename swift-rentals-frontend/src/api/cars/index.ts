@@ -3,7 +3,7 @@ const BASEURL = "http://localhost:3001/api";
 const token = "";
 
 export const carAPI = {
-  getCarList: ({ page = 1 }) => {
+  getCarList: ({ page = 1, token }: { page: number; token: string | null }) => {
     return axios.get(`${BASEURL}/car/get-cars?page=${page}`, {
       headers: {
         Authorization: token,
@@ -25,22 +25,22 @@ export const carAPI = {
       },
     });
   },
-  addAvailabilityCreate: (formData: object) => {
+  addAvailabilityCreate: (formData: object, token: string | null) => {
     return axios.post(`${BASEURL}/car/add-availability/`, formData, {
       headers: {
         Authorization: token,
       },
     });
   },
-  listAvailability: (id: string) => {
+  listAvailability: (id: string, token: string | null) => {
     return axios.get(`${BASEURL}/car/list-availability?car_id=${id}`, {
       headers: {
         Authorization: token,
       },
     });
   },
-  deleteAvailability: (data: object) => {
-    return axios.delete(`${BASEURL}/car/delete-availability/`, {
+  deleteAvailability: (data: object, token: string | null) => {
+    return axios.delete(`${BASEURL}/car/delete-availability`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
@@ -75,14 +75,14 @@ export const carAPI = {
       },
     });
   },
-  triggerToWishList: (car_id: string) => {
+  triggerToWishList: (car_id: string, token: string | null) => {
     return axios.post(
       `${BASEURL}/car/trigger-car-to-wishlist/`,
-      { car_id: car_id },
+      { car_id },
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "token",
+          Authorization: token,
         },
       }
     );
@@ -90,11 +90,11 @@ export const carAPI = {
   getCarById: (car_id: string) => {
     return axios.get(`${BASEURL}/car/get-car/${car_id}`);
   },
-  getCarsInWishList: () => {
+  getCarsInWishList: (token: string | null) => {
     return axios.get(`${BASEURL}/car/get-cars-in-wishlist/`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: "token",
+        Authorization: token,
       },
     });
   },

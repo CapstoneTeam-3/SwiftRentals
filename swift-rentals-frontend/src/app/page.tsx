@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Hero from "./components/Hero/Hero";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -27,12 +28,18 @@ export default function Home() {
               experience.
             </p>
             <div className="mx-4 my-6">
-              <button className="bg-blue-500 rounded-xl text-white p-3 m-2 font-bold hover:opacity-80 transition-opacity ">
+              <Link
+                href="/cars"
+                className="bg-blue-500 rounded-xl text-white p-3 m-2 font-bold hover:opacity-80 transition-opacity "
+              >
                 Explore our Cars
-              </button>
-              <button className="bg-blue-200 rounded-xl text-blue-500 font-bold py-3 px-5 m-2 hover:opacity-80 transition-opacity">
+              </Link>
+              <Link
+                href="/about"
+                className="bg-blue-200 rounded-xl text-blue-500 font-bold py-3 px-5 m-2 hover:opacity-80 transition-opacity"
+              >
                 Find out More!
-              </button>
+              </Link>
             </div>
           </div>
         </div>

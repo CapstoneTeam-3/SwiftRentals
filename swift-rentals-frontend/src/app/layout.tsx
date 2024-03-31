@@ -1,17 +1,19 @@
+import { selectIsLoggedIn } from "@/redux/features/user/userSlice";
+import { RootState } from "@/redux/store";
 import StoreProvider from "@/redux/StoreProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
+import { useSelector } from "react-redux";
 import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { ChatDrawer } from "./components/ChatDrawer/ChatDrawer";
 import Footer from "./components/footer/Footer";
-import "react-toastify/dist/ReactToastify.css";
-import "./globals.css";
 import Nav from "./components/nav/Nav";
-import { selectIsLoggedIn } from "@/redux/features/user/userSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import "./globals.css";
+import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -63,7 +65,7 @@ export default function RootLayout({
           />
           <ChatDrawer />
           <Nav />
-          {children}
+          <Suspense fallback={<Loading />}>{children}</Suspense>
           <Footer />
         </StoreProvider>
       </body>
