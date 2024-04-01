@@ -8,15 +8,6 @@ import { toast } from "react-toastify";
 
 export default function AdminHome() {
 
-  const token = useSelector((state: RootState) => selectToken(state));
-  const router = useRouter();
-
-  if(!token){
-      toast.error("Please login first")
-      return router.push("/auth/login")
-  }
-
-
   const cards = [
     { value: "cars", label: "Cars" },
     { value: "admin", label: "Admin" },

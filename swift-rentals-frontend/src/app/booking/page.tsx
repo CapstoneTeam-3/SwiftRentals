@@ -18,10 +18,6 @@ export default function BookingList() {
     const router = useRouter();
     const token = useSelector((state: RootState) => selectToken(state));
 
-    if(!token){
-        toast.error("Please login first")
-        return router.push("/auth/login")
-    }
     const dispatch = useAppDispatch();
     const bookingList = useAppSelector((state) => state.booking.bookingList);
     const loading = useAppSelector((state) => state.booking.loading);

@@ -19,11 +19,6 @@ export default function CarDetail() {
   const token = useSelector((state: RootState) => selectToken(state));
   const router = useRouter();
 
-  if(!token){
-      toast.error("Please login first")
-      return router.push("/auth/login")
-  }
-
   const submitRating = async () => {
     try {
       const response = await axios.post(

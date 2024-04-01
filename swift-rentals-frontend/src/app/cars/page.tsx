@@ -27,10 +27,7 @@ export default function CarList() {
   const token = useSelector((state: RootState) => selectToken(state));
 
   const route = useRouter();
-  if(!token){
-    toast.error("Please login first")
-    return route.push("/auth/login")
-}
+
   const dispatch = useAppDispatch();
   const car = useAppSelector((state) => state.car);
   const [wishListCars, setwishListCars] = useState([]);

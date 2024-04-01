@@ -39,11 +39,6 @@ export default function EditCar() {
   const token = useSelector((state: RootState) => selectToken(state));
   const router = useRouter();
 
-    if(!token){
-        toast.error("Please login first")
-        return router.push("/auth/login")
-    }
-
   const dispatch = useAppDispatch();
   const { selectedCar } = useAppSelector((state) => state.car);
   const feature = useAppSelector((state) => state.feature);

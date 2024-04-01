@@ -23,10 +23,6 @@ export default function CarWishList() {
   const dispatch = useAppDispatch();
 
   const token = useSelector((state: RootState) => selectToken(state));
-  if(!token){
-    toast.error("Please login first")
-    return route.push("/auth/login")
-}
 
   const handleCarClick = (car: Car) => {
     dispatch(setSelectedCar({ car }));

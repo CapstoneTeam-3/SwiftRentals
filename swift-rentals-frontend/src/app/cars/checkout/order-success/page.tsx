@@ -15,11 +15,6 @@ export default function Page() {
   const token = useSelector((state: RootState) => selectToken(state));
   const router = useRouter();
 
-  if(!token){
-      toast.error("Please login first")
-      return router.push("/auth/login")
-  }
-
   useEffect(() => {
     toast.success("Car Booking requested Successfully!");
     toast.success("You can now chat with car owner!");

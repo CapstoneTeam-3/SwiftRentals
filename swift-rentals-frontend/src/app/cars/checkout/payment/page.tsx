@@ -21,11 +21,6 @@ export default function Page(props: any) {
   const token = useSelector((state: RootState) => selectToken(state));
   const router = useRouter();
 
-  if(!token){
-      toast.error("Please login first")
-      return router.push("/auth/login")
-  }
-
   const [secret, setSecret] = React.useState(null);
   console.log("router : ", props.router);
   const searchParam = useSearchParams();

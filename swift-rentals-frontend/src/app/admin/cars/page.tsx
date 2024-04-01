@@ -28,11 +28,6 @@ export default function Cars() {
     const token = useSelector((state: RootState) => selectToken(state));
     const router = useRouter();
 
-    if(!token){
-        toast.error("Please login first")
-        return router.push("/auth/login")
-    }
-
     const dispatch = useAppDispatch();
     const car = useAppSelector(state => state.car);
 
