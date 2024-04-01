@@ -17,7 +17,6 @@ const stripePromise = loadStripe(
 );
 
 export default function Page(props: any) {
-
   const token = useSelector((state: RootState) => selectToken(state));
   const router = useRouter();
 
@@ -31,7 +30,12 @@ export default function Page(props: any) {
     const fetchSecret = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:3001/api/payment/intent?amount=${amount}`
+          `http://localhost:3001/api/payment/intent?amount=${amount}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
         );
         setSecret(data.client_secret);
       } catch (error) {

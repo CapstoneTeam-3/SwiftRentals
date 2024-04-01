@@ -51,7 +51,7 @@ export default function BookingList() {
     }, []);
 
     return (
-        <main className="min-h-screen w-full bg-[#f1f1fc]">
+        <main className="min-h-screen w-full">
             <div className="container mx-auto md:max-w-[1050px] py-5">
                 <div className="mt-10 mb-8 flex flex-wrap justify-between items-baseline">
                     <h1 className="text-3xl mb-5 font-semibold">
