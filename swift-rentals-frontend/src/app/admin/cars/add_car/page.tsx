@@ -47,7 +47,7 @@ export default function AddCar() {
   } = useForm<CarSchemaType>({ resolver: zodResolver(CarSchema) });
 
   useEffect(() => {
-    dispatch(fetchFeatures());
+    dispatch(fetchFeatures(token));
   }, []);
 
   const onSubmit: SubmitHandler<CarSchemaType> = async (data) => {
