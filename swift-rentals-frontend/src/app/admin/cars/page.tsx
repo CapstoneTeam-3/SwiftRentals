@@ -45,7 +45,7 @@ export default function Cars() {
     
     const handleEditClick = (item: Car) => {
         dispatch(setSelectedCar(item));
-        router.push('/admin/cars/edit');
+        router.push('/admin/cars/edit_car');
     }
 
 

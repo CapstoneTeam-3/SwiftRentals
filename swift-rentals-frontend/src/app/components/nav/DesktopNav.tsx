@@ -1,6 +1,7 @@
 "use client";
 
-import { logoutUser } from "@/redux/features/user/userSlice";
+import { logoutUser, selectUser } from "@/redux/features/user/userSlice";
+import { RootState } from "@/redux/store";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,7 +12,7 @@ import {
   BsSunFill as LightIcon,
   BsGearFill as SettingsIcon,
 } from "react-icons/bs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function DesktopNav({
   menuItems,
@@ -25,7 +26,8 @@ export default function DesktopNav({
   isLoggedIn: boolean;
 }) {
   const dispatch = useDispatch();
-
+  const userData = useSelector((state: RootState) => selectUser(state));
+  const userId = userData._id;
   const route = useRouter();
 
   const handleLogout = () => {
@@ -110,9 +112,12 @@ export default function DesktopNav({
                 <li>
                   <Link href="/booking">Your Requests</Link>
                 </li>
-                <li>
+                {userData.role === "car rental" && (<li>
                   <Link href="/cars/wishlist">Your Wishlist</Link>
-                </li>
+                </li>)}
+                {userData.role === "car owner" && (<li>
+                  <Link href="/cars/add_car">Add Car</Link>
+                </li>)}
               </ul>
             </div>
           )}

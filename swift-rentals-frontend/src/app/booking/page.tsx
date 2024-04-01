@@ -12,11 +12,13 @@ import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { carAPI } from '@/api/cars';
 import { toast } from 'react-toastify';
 import { RootState } from '@/redux/store';
-import { selectToken } from '@/redux/features/user/userSlice';
+import { selectToken, selectUser } from '@/redux/features/user/userSlice';
 
 export default function BookingList() {
     const router = useRouter();
     const token = useSelector((state: RootState) => selectToken(state));
+    const userData = useSelector((state: RootState) => selectUser(state));
+    const userId = userData._id;
 
     const dispatch = useAppDispatch();
     const bookingList = useAppSelector((state) => state.booking.bookingList);
@@ -32,7 +34,7 @@ export default function BookingList() {
           const response = await carAPI.bookingRequests(data, token);
           if (response?.data?.message) {
             toast.success(response?.data?.message);
-            dispatch(fetchBooking({ user_id: '65c28bc1f817b57985878e72', active: false }));
+            dispatch(fetchBooking({  user_id: userId, active: false }));
         }
         } catch (error) {
           console.error(error);
@@ -47,7 +49,7 @@ export default function BookingList() {
     }
 
     useEffect(() => {
-        dispatch(fetchBooking({ user_id: '65c28bc1f817b57985878e72', active: false }));
+        dispatch(fetchBooking({ user_id: userId, active: false }));
     }, []);
 
     return (
@@ -126,7 +128,7 @@ export default function BookingList() {
                                                         </>
                                                     )}
                                                 </h3>
-                                                {item.is_booked === "PENDING" && <div className='flex flex-col justify-between item-center my-2'>
+                                                {item.is_booked === "PENDING" && userData.role === "car owner" &&  <div className='flex flex-col justify-between item-center my-2'>
                                                     <div className='flex justify-center item-center'>
                                                         <button onClick={() => handlerRejectBooking(item._id, true)} className="bg-green-200 rounded-xl w-fit p-3 m-1 text-xl">
                                                             <FaCheckCircle color="green" />
@@ -138,7 +140,7 @@ export default function BookingList() {
                                                 </div>}
                                             </span>
                                         </div>
-                                        <div className="flex flex-wrap">
+                                        {userData.role === "car owner" && (<div className="flex flex-wrap">
                                             <span className='text-base'>
                                                 <span className='text-black-900'>
                                                     <b>From:</b> {item.User.name}
@@ -154,7 +156,24 @@ export default function BookingList() {
                                                     {formatDate(item.end_date)}
                                                 </p>
                                             </span>
-                                        </div>
+                                        </div>)}
+                                        {userData.role === "car rental" && (<div className="flex flex-wrap">
+                                            <span className='text-base'>
+                                                <span className='text-black-900'>
+                                                    <b>Model:</b> {item.Car.model}
+                                                </span>
+                                                <br />
+                                                <span className='text-black-900'>
+                                                    <b>Location:</b> {item.Car.location}
+                                                </span>
+                                                <br />
+                                                <p className='bg-gray-200 text-black-700 px-1.5 py-2 my-2 rounded-xl inline-block'>
+                                                    {formatDate(item.start_date)}
+                                                    {' - '}
+                                                    {formatDate(item.end_date)}
+                                                </p>
+                                            </span>
+                                        </div>)}
                                     </div>
                                 </div>
                             ))

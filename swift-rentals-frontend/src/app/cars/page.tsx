@@ -2,7 +2,7 @@
 
 import { carAPI } from "@/api/cars";
 import { fetchCars, setSelectedCar } from "@/redux/features/cars/carSlice";
-import { selectToken } from "@/redux/features/user/userSlice";
+import { selectToken, selectUser } from "@/redux/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { Car } from "@/types";
@@ -25,6 +25,7 @@ import NoSSRWrapper from "../components/NoSSRWrapper/NoSSRWrapper";
 
 export default function CarList() {
   const token = useSelector((state: RootState) => selectToken(state));
+  const userData = useSelector((state: RootState) => selectUser(state));
 
   const route = useRouter();
 
@@ -34,7 +35,9 @@ export default function CarList() {
 
   useEffect(() => {
     dispatch(fetchCars(1));
-    getWishList();
+    if(userData.role === 'car rental'){
+      getWishList();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
@@ -98,8 +101,8 @@ export default function CarList() {
                 >
                   <Image
                     src={
-                      item?.images && item?.images[0]?.secure_url
-                        ? item?.images[0]?.secure_url
+                      item?.images && item?.images[0]
+                        ? item?.images[0]
                         : "/images/car-placeholder.png"
                     }
                     alt="Car"
@@ -123,7 +126,7 @@ export default function CarList() {
                         {item?.model}
                       </h2>
                       <div className="flex justify-end text-2xl sm:text-3xl">
-                        <div className="bg-white rounded-md p-2 shadow-sm cursor-pointer">
+                        {userData.role !== "car owner" && (<div className="bg-white rounded-md p-2 shadow-sm cursor-pointer">
                           {wishListCars &&
                           wishListCars.some((c) => c === item._id) ? (
                             <FaHeart
@@ -134,14 +137,14 @@ export default function CarList() {
                               onClick={() => handleToWishClick(item._id)}
                             />
                           )}
-                        </div>
-                        <button
+                        </div>)}
+                        {userData.role === "car owner" && (<button
                           onClick={() => onOpenModal(item?._id)}
                           className="bg-white rounded-md p-2 shadow-sm"
                         >
                           <MdOutlineBallot />
-                        </button>
-                        {open == item._id && (
+                        </button>)}
+                        {open == item._id && userData.role === "car owner" && (
                           <div
                             className="fixed top-0 left-0 right-0 h-full overflow-y-auto backdrop-blur-md"
                             aria-labelledby="modal-title"
