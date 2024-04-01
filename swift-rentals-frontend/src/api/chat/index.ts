@@ -20,10 +20,15 @@ export const chatAPI = {
       },
     });
   },
-  createChatList: (user1: string, user2: string) => {
+  createChatList: (user1: string, user2: string, token: string | null) => {
     return axios.post(`${BASEURL}/chat/create-chat-list`, {
       user1,
       user2,
+    }, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      }
     });
   },
 };

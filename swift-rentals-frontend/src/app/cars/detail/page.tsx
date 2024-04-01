@@ -107,17 +107,17 @@ export default function CarDetail() {
                 <div className="grid grid-cols-2 gap-4 max-w-[500px]">
                   {selectedCar?.Features?.map((feature) => (
                     <div className="flex items-center">
-                      <img
+                      {/* <img
                         src="/images/car.png"
                         className="h-[30px] w-[30px] object-contain"
-                      />
+                      /> */}
                       <span className="ms-2">{feature?.name}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            <div className="w-full lg:w-1/3 shadow-md rounded-xl bg-white p-8 h-72">
+            <div className="w-full lg:w-1/3 shadow-md rounded-xl bg-white p-8 min-h-72">
               <span className="text-lg font-bold mb-1 text-right me-2">
                 CAD ${selectedCar.price ?? 0} total
               </span>

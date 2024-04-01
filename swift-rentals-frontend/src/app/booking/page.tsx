@@ -89,7 +89,7 @@ export default function BookingList() {
                                 <div key={index} className="flex flex-col flex-wrap border rounded-2xl overflow-hidden md:flex-row">
                                     <div className="w-full md:w-[300px]">
                                         <Image
-                                            src={item?.Car.images[0]?.secure_url ? item?.Car.images[0]?.secure_url : '/images/car-placeholder.png'}
+                                            src={item?.Car.images[0] ? item?.Car.images[0] : '/images/car-placeholder.png'}
                                             alt="Car"
                                             width={300}
                                             height={180}

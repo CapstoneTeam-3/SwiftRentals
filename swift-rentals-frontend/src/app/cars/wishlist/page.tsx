@@ -54,7 +54,7 @@ export default function CarWishList() {
             manufacturing_year,
             is_available,
             price,
-            images: images?.map((image: any) => image?.secure_url),
+            images: images?.map((image: any) => image),
             description,
             location,
             Features,
@@ -166,7 +166,7 @@ export default function CarWishList() {
                       </div>
                     </div>
                     <span className="flex items-center mt-2 mb-1 text-lg">
-                      <>
+                    <>
                         {item?.ratings?.average} <IoIosStar className="mx-1" />(
                         {item?.ratings?.count} trips)
                       </>
