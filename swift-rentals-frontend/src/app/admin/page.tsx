@@ -5,12 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { FaUsers, FaCarSide } from "react-icons/fa";
+import { MdOutlinePayments } from "react-icons/md";
 
 export default function AdminHome() {
 
   const cards = [
-    { value: "cars", label: "Cars" },
-    { value: "admin", label: "Admin" },
+    { value: "cars", label: "Cars", icon: <FaCarSide/> },
+    { value: "users", label: "Users", icon: <FaUsers/> },
+    { value: "payments", label: "Payment", icon: <MdOutlinePayments/> },
   ];
   return (
     <main className="min-h-screen w-full">
@@ -20,6 +23,7 @@ export default function AdminHome() {
           {cards.map((item) => (
             <Link key={item.value} href={`/admin/${item.value}`}>
               <div className="bg-white shadow-md p-5 rounded-lg">
+              <span className="text-xl">{item.icon}</span>
                 {item.label}
               </div>
             </Link>

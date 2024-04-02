@@ -1,14 +1,16 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { MdArrowDropDown, MdArrowDropUp, MdHomeFilled } from "react-icons/md";
+import { MdArrowDropDown, MdArrowDropUp, MdNearbyError } from "react-icons/md";
 import FilterItem from "./FilterItem";
 
 const FilterDropDown = ({
   filterItems,
   heading,
+  icon
 }: {
   filterItems: FilterItem[];
   heading: string;
+  icon: any
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -22,7 +24,7 @@ const FilterDropDown = ({
         className="hover:bg-sky-100 flex gap-2 hover:text-sky-500 cursor-pointer transition-colors p-1 rounded-md text-gray-400 font-bold"
         onClick={toggleDropdown}
       >
-        <MdHomeFilled size={28} />
+        {icon ? (icon) : (<MdNearbyError size={28} />)}
         <span className="hidden md:block">{heading}</span>
         <div className="hidden md:block ml-auto">
           {showDropdown ? (

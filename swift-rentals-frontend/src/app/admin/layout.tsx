@@ -6,6 +6,8 @@ import React from "react";
 import BreadCrumb from "../components/breadcrumbs/BreadCrumb";
 import FilterDropDown from "../ui/Filter/FilterDropDown/FilterDropDown";
 import FilterItem from "../ui/Filter/FilterDropDown/FilterItem";
+import { FaUsers, FaCarSide } from "react-icons/fa";
+import { MdOutlinePayments } from "react-icons/md";
 
 export default function AdminLayout({
   children,
@@ -28,6 +30,7 @@ export default function AdminLayout({
               new FilterItem("User List", "/admin/user/user_list"),
               new FilterItem("create user", "/admin/user/create_user"),
             ]}
+            icon={<FaUsers size={28} />}
           />
           <FilterDropDown
             heading="Cars"
@@ -36,6 +39,14 @@ export default function AdminLayout({
               new FilterItem("Add car", "/admin/cars/add_car"),
               new FilterItem("Edit car", "/admin/cars/edit_car"),
             ]}
+            icon={<FaCarSide size={28} />}
+          />
+          <FilterDropDown
+            heading="Payments"
+            filterItems={[
+              new FilterItem("All Payments", "/admin/payments"),
+            ]}
+            icon={<MdOutlinePayments size={28}/>}
           />
         </ul>
       </div>

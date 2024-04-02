@@ -108,7 +108,7 @@ export default function CarList() {
                     alt="Car"
                     width={300}
                     height={180}
-                    layout="responsive"
+                    priority={true} 
                     className="w-full h-[180px] bg-[#f7f4f4]"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src =
