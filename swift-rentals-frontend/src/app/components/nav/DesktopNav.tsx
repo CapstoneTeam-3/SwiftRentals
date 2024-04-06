@@ -1,8 +1,10 @@
 "use client";
 
-import { logoutUser } from "@/app/auth/login/userSlice";
+import { logoutUser, selectUser } from "@/redux/features/user/userSlice";
+import { RootState } from "@/redux/store";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import {
@@ -10,7 +12,7 @@ import {
   BsSunFill as LightIcon,
   BsGearFill as SettingsIcon,
 } from "react-icons/bs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function DesktopNav({
   menuItems,
@@ -24,12 +26,19 @@ export default function DesktopNav({
   isLoggedIn: boolean;
 }) {
   const dispatch = useDispatch();
+  const userData = useSelector((state: RootState) => selectUser(state));
+  const userId = userData._id;
+  const route = useRouter();
+
+  const handleLogout = () => {
+    route.push("/auth/login");
+    dispatch(logoutUser());
+  };
 
   const [activeTheme, setActiveTheme] = useState("light");
 
   useEffect(() => {
     document.body.dataset.theme = activeTheme;
-    console.log("dependecies changed");
   }, [activeTheme]);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
 
@@ -62,7 +71,7 @@ export default function DesktopNav({
             if (item === "Logout")
               return (
                 <button
-                  onClick={() => dispatch(logoutUser())}
+                  onClick={handleLogout}
                   key={i}
                   className="transition-transform hover:scale-110 cursor-pointer hover:text-blue-600"
                 >
@@ -101,14 +110,22 @@ export default function DesktopNav({
                   <Link href="#">Profile</Link>
                 </li>
                 <li>
-                  <Link href="#">Your Requests</Link>
+                  <Link href="/booking">Your Requests</Link>
                 </li>
+                {userData.role === "car rental" && (<li>
+                  <Link href="/cars/wishlist">Your Wishlist</Link>
+                </li>)}
+                {userData.role === "car owner" && (<li>
+                  <Link href="/cars/add_car">Add Car</Link>
+                </li>)}
               </ul>
             </div>
           )}
-
         </IconContext.Provider>
       </div>
     </nav>
   );
 }
+DesktopNav.getInitialProps = async () => {
+  return {};
+};

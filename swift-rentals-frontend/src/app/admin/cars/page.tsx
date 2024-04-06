@@ -1,12 +1,16 @@
 "use client"
 import { carAPI } from "@/api/cars";
 import { fetchCars, setSelectedCar } from "@/redux/features/cars/carSlice";
+import { selectToken } from "@/redux/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { Car } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 
 type CarTable = {
@@ -21,16 +25,18 @@ const car_table: CarTable = {
 
 
 export default function Cars() {
+    const token = useSelector((state: RootState) => selectToken(state));
     const router = useRouter();
+
     const dispatch = useAppDispatch();
     const car = useAppSelector(state => state.car);
 
     useEffect(() => {
-        dispatch(fetchCars(1));
+        dispatch(fetchCars(1,));
     }, []);
 
     const handleDeleteClick = (id: string) => {
-        carAPI.deleteCar(id).then((response) => {
+        carAPI.deleteCar(id, token).then((response) => {
             dispatch(fetchCars(1));
         }).catch((error) => {
             console.log('deleteCar ', error?.message);
@@ -39,7 +45,7 @@ export default function Cars() {
     
     const handleEditClick = (item: Car) => {
         dispatch(setSelectedCar(item));
-        router.push('/admin/cars/edit');
+        router.push('/admin/cars/edit_car');
     }
 
 

@@ -1,41 +1,115 @@
-import axios from "axios"
-const BASEURL = "http://localhost:3001/api"
+import axios from "axios";
+const BASEURL = "http://localhost:3001/api";
+const token = "";
 
 export const carAPI = {
-    getCarList: ({ page = 1 }) => {
-        return axios.get(`${BASEURL}/car/get-cars?page=${page}`)
-    },
-    addCar: (formData: any) => {
-        return axios.post(`${BASEURL}/car/add-car/`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            }
-        });
-    },
-    deleteCar: (id: string) => {
-        return axios.delete(`${BASEURL}/car/delete-car/${id}`)
-    },
-    addAvailabilityCreate: (formData: object) =>{
-        return axios.post(`${BASEURL}/car/add-availability/`,formData, {
-        })
-    },
-    listAvailability: (id: string) => {
-        return axios.get(`${BASEURL}/car/list-availability?car_id=${id}`)
-    },
-    deleteAvailability: (data: object) => {
-        return axios.delete(`${BASEURL}/car/delete-availability/`, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            data: data,
-        });
-    },
-    createCarBooking: (formData: any) => {
-        return axios.post(`${BASEURL}/booking/create/`, formData, {
-            headers: {
-                "Content-Type": "application/json",
-            }
-        });
-    },
-
-}
+  getCarList: ({ page = 1, token }: { page: number; token: string | null }) => {
+    return axios.get(`${BASEURL}/car/get-cars?page=${page}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  },
+  addCar: (formData: any, token: string | null) => {
+    return axios.post(`${BASEURL}/car/add-car/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: token,
+      },
+    });
+  },
+  deleteCar: (id: string, token: string | null) => {
+    return axios.delete(`${BASEURL}/car/delete-car/${id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  },
+  addAvailabilityCreate: (formData: object, token: string | null) => {
+    return axios.post(`${BASEURL}/car/add-availability/`, formData, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  },
+  listAvailability: (id: string, token: string | null) => {
+    return axios.get(`${BASEURL}/car/list-availability?car_id=${id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+  },
+  deleteAvailability: (data: object, token: string | null) => {
+    return axios.delete(`${BASEURL}/car/delete-availability`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      data: data,
+    });
+  },
+  createCarBooking: (formData: any, token: string | null) => {
+    return axios.post(`${BASEURL}/booking/create/`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+  },
+  getAllBookingRequestsWithFilter: ({
+    user_id,
+    active,
+    token
+  }: {
+    user_id: string;
+    active?: boolean;
+    token: string | null
+  }) => {
+    const queryParams = active
+      ? `?user_id=${user_id}&active=${active}`
+      : `?user_id=${user_id}`;
+    return axios.get(`${BASEURL}/booking/list/${queryParams}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+  },
+  bookingRequests: (formData: any, token: string | null) => {
+    return axios.post(`${BASEURL}/booking/respond/`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+  },
+  triggerToWishList: (car_id: string, token: string | null) => {
+    return axios.post(
+      `${BASEURL}/car/trigger-car-to-wishlist/`,
+      { car_id },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+  },
+  getCarById: (car_id: string, token: string | null) => {
+    return axios.get(`${BASEURL}/car/get-car/${car_id}`,
+      {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      }
+    })
+  },
+  getCarsInWishList: (token: string | null) => {
+    return axios.get(`${BASEURL}/car/get-cars-in-wishlist/`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+  },
+};

@@ -1,13 +1,16 @@
 "use client";
 import { carAPI } from "@/api/cars";
 import { fetchFeatures } from "@/redux/features/features/featureSlice";
+import { selectToken } from "@/redux/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaRegSnowflake } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { z, ZodError } from "zod";
 
@@ -32,8 +35,11 @@ const CarSchema = z.object({
 type CarSchemaType = z.infer<typeof CarSchema>;
 
 export default function EditCar() {
-  const dispatch = useAppDispatch();
+
+  const token = useSelector((state: RootState) => selectToken(state));
   const router = useRouter();
+
+  const dispatch = useAppDispatch();
   const { selectedCar } = useAppSelector((state) => state.car);
   const feature = useAppSelector((state) => state.feature);
 
@@ -44,7 +50,7 @@ export default function EditCar() {
   } = useForm<CarSchemaType>({ resolver: zodResolver(CarSchema) });
 
   useEffect(() => {
-    dispatch(fetchFeatures());
+    dispatch(fetchFeatures(token));
   }, []);
 
   const onSubmit: SubmitHandler<CarSchemaType> = async (data) => {

@@ -1,19 +1,34 @@
+import { getMessage } from "@reduxjs/toolkit/dist/actionCreatorInvariantMiddleware";
 import axios from "axios";
 const BASEURL = "http://localhost:3001/api";
+const token = "";
 
 export const chatAPI = {
-  getChatList: (userId: string | null) => {
-    // return axios.get(`${BASEURL}/chat/get-chat-list?user-id=${userId}`);
-    return axios.get(`${BASEURL}/chat/get-chat-list`);
-  },
-  addCar: (formData: any) => {
-    return axios.post(`${BASEURL}/car/add-car/`, formData, {
+  getChatList: (userId: string | null, token: string | null) => {
+    return axios.get(`${BASEURL}/chat/get-chat-list?user_id=${userId}`, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
+        Authorization: token,
       },
     });
   },
-  deleteCar: (id: string) => {
-    return axios.delete(`${BASEURL}/car/delete-car/${id}`);
+  getMessagesByChatId: (chatId: string | null, token: string | null) => {
+    return axios.get(`${BASEURL}/chat/get-messages?chatList_id=${chatId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+  },
+  createChatList: (user1: string, user2: string, token: string | null) => {
+    return axios.post(`${BASEURL}/chat/create-chat-list`, {
+      user1,
+      user2,
+    }, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      }
+    });
   },
 };

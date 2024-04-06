@@ -4,9 +4,9 @@ import { featuresAPI } from '@/api/features';
 
 export const fetchFeatures = createAsyncThunk(
     'features/fetch',
-    async () => {
+    async (token: string | null) => {
         try {
-            const response = await featuresAPI.getFeatureList();
+            const response = await featuresAPI.getFeatureList({token});
             return response.data
         }
         catch (error) {
