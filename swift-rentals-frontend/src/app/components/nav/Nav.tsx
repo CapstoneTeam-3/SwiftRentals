@@ -19,7 +19,7 @@ const Nav = () => {
     "Admin",
     isLoggedIn ? "Logout" : "Login",
   ];
-  const menuLinks: string[] = ["/cars", "/", "/admin", "/auth/login"];
+  const menuLinks: string[] = ["/cars", "/profile/driver-license", "/admin", "/auth/login"];
   return (
     <React.Fragment>
       <NoSSRWrapper>
